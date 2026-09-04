@@ -1,0 +1,48 @@
+{
+  "name": "md2wechat",
+  "version": "2.2.0",
+  "description": "md2wechat · 行途排版引擎 — Markdown → 微信公众号排版，零依赖、全内联样式、10+ 主题、CLI + 单文件离线工作台、AI 友好",
+  "main": "lib/engine.js",
+  "bin": {
+    "md2wechat": "bin/md2wechat.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "app",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "markdown",
+    "wechat",
+    "公众号",
+    "排版",
+    "typograph",
+    "md2wechat",
+    "行途排版",
+    "wechat-mp",
+    "wechat-format",
+    "xingtu"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "demo": "node bin/md2wechat.js examples/demo.md",
+    "build": "node tools/build-app.js",
+    "test": "node -e \"require('./lib/engine.js'); console.log('engine ok')\""
+  },
+  "author": {
+    "name": "行途",
+    "email": "274853659+xingtu1996@users.noreply.github.com",
+    "url": "https://github.com/xingtu1996"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xingtu1996/md2wechat.git"
+  },
+  "homepage": "https://github.com/xingtu1996/md2wechat",
+  "aigc-notice": "本项目代码由行途 + AI 辅助生成；设计与决策由人类主导"
+}

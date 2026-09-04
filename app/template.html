@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>行途排版 · md2wechat v2.2</title>
+<style>
+:root{
+  --main:#056DE8;
+  --main-light:#0099ff;
+  --main-dark:#0052b3;
+  --main-bg:rgba(5,109,232,0.08);
+  --main-bg-focus:rgba(5,109,232,0.12);
+  --main-shadow:rgba(5,109,232,0.25);
+  --main-shadow-hover:rgba(5,109,232,0.35);
+  --main-shadow-logo:rgba(5,109,232,0.30);
+  --bg:#f5f5f7;
+  --panel:rgba(255,255,255,0.72);
+  --panel-solid:#ffffff;
+  --ink:#1d1d1f;
+  --mut:#86868b;
+  --line:rgba(0,0,0,0.08);
+  --hover:rgba(0,0,0,0.04);
+  --success:#34c759;
+  --warning:#ff9500;
+  --danger:#ff3b30;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+  color:var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+select,input{font-family:inherit}
+svg{display:block;flex-shrink:0}
+
+/* ============ 顶栏（毛玻璃） ============ */
+.topbar{
+  height:52px;
+  background:var(--panel);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px;
+  padding:0 20px;
+  position:relative;z-index:30;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-.2px}
+.brand .logo{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--main),var(--main-light));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;font-weight:700;
+  box-shadow:0 2px 8px var(--main-shadow-logo);
+}
+.brand small{color:var(--mut);font-weight:500;font-size:11px;margin-left:2px}
+.title-in{
+  flex:1;max-width:300px;min-width:120px;
+  border:1px solid var(--line);border-radius:10px;
+  padding:8px 14px;font-size:13px;outline:none;
+  background:rgba(255,255,255,0.8);
+  transition:border-color .2s,box-shadow .2s;
+}
+.title-in:focus{border-color:var(--main);box-shadow:0 0 0 3px var(--main-bg-focus)}
+.spacer{flex:1}
+.icon-btn{
+  display:flex;align-items:center;gap:7px;
+  border:1px solid var(--line);background:rgba(255,255,255,0.8);
+  border-radius:10px;padding:7px 12px;font-size:13px;color:#444;
+  transition:all .15s;
+}
+.icon-btn:hover{background:#fff;border-color:rgba(0,0,0,0.15)}
+.icon-btn.active{border-color:var(--main);color:var(--main);background:var(--main-bg)}
+.copy-btn{
+  display:flex;align-items:center;gap:7px;
+  border:none;border-radius:10px;padding:8px 18px;
+  font-size:13.5px;font-weight:600;
+  background:var(--main);color:#fff;
+  box-shadow:0 2px 8px var(--main-shadow);
+  transition:all .15s;
+}
+.copy-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px var(--main-shadow-hover)}
+.copy-btn:active{transform:translateY(0)}
+.copy-btn .kbd{
+  font-size:10px;background:rgba(255,255,255,.2);
+  padding:2px 6px;border-radius:4px;font-weight:500;
+}
+
+/* ============ 主体 ============ */
+.main{display:grid;grid-template-columns:1fr 1fr;height:calc(100% - 52px);gap:0}
+.pane{display:flex;flex-direction:column;min-width:0}
+.editor-pane{border-right:1px solid var(--line);background:var(--panel-solid)}
+.pane-head{
+  height:36px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;font-size:11px;color:var(--mut);font-weight:500;
+  letter-spacing:.3px;border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,0.5);
+}
+.pane-head .hint{color:#b0b0b5;font-weight:400}
+.tool-mini{display:flex;gap:4px}
+.tool-mini button{
+  display:flex;align-items:center;gap:5px;
+  background:transparent;border:none;color:var(--mut);
+  border-radius:6px;padding:4px 10px;font-size:11px;
+  transition:all .15s;
+}
+.tool-mini button:hover{background:var(--hover);color:var(--ink)}
+#editor{
+  flex:1;border:none;outline:none;resize:none;
+  background:transparent;color:var(--ink);
+  font-family:"SF Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size:13px;line-height:1.75;padding:18px 20px;tab-size:2;
+}
+.pane-status{
+  height:28px;border-top:1px solid var(--line);
+  color:var(--mut);font-size:11px;
+  display:flex;align-items:center;padding:0 16px;gap:14px;
+  background:rgba(255,255,255,0.5);
+}
+
+/* 预览侧 */
+.preview-pane{
+  background:var(--bg);
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:32px 24px 80px;
+}
+.preview-inner{width:100%;max-width:460px;margin:0 auto}
+.phone{
+  width:100%;background:#fff;
+  border-radius:18px;
+  box-shadow:0 4px 24px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
+  overflow:hidden;
+  border:1px solid rgba(0,0,0,0.04);
+}
+.phone .ph-title{padding:22px 24px 4px;font-size:17px;font-weight:700;line-height:1.5;text-align:center;color:var(--ink);letter-spacing:-.2px}
+.phone .ph-meta{display:flex;align-items:center;gap:8px;padding:10px 24px 16px;justify-content:center}
+.phone .ph-meta .avatar{
+  width:20px;height:20px;border-radius:50%;
+  background:linear-gradient(135deg,var(--main),var(--main-light));
+  flex-shrink:0;
+}
+.phone .ph-meta .author{font-size:11px;color:var(--mut)}
+.phone .ph-body{padding:10px 24px 44px;border-top:1px solid #f5f5f7}
+#content{min-height:120px}
+.preview-empty{color:var(--mut);text-align:center;padding:60px 20px;font-size:14px}
+
+/* 宽屏模式 */
+.preview-pane.wide .preview-inner{max-width:780px}
+.preview-pane.wide .phone .ph-title{text-align:left}
+.preview-pane.wide .phone .ph-meta{justify-content:flex-start;padding-left:28px}
+
+/* ============ 弹出面板（毛玻璃） ============ */
+.pop{
+  position:absolute;top:58px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:16px;
+  box-shadow:0 12px 40px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);
+  padding:16px;
+  display:none;z-index:40;
+  max-height:calc(100vh - 80px);
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.pop::-webkit-scrollbar{width:6px}
+.pop::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:3px}
+.pop::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.25)}
+.pop.show{display:block}
+.pop-title{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--ink);display:flex;align-items:center;gap:8px}
+.tp-group{margin-bottom:12px}
+.tp-group-name{font-size:10px;color:var(--mut);font-weight:600;letter-spacing:1px;margin-bottom:7px;text-transform:uppercase}
+.tp-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tp-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border:1px solid var(--line);
+  border-radius:10px;background:rgba(255,255,255,0.6);
+  font-size:12.5px;font-weight:500;text-align:left;
+  transition:all .15s;color:var(--ink);
+}
+.tp-item:hover{border-color:rgba(0,0,0,0.15);background:#fff}
+.tp-item.active{border-color:var(--main);background:var(--main-bg);color:var(--main)}
+.tp-item .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.tp-item .tp-desc{font-size:10px;color:var(--mut);font-weight:400;display:block;line-height:1.3;margin-top:1px}
+.tp-adv{
+  border-top:1px dashed var(--line);
+  margin-top:8px;padding-top:12px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.tp-adv label{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:6px}
+.tp-adv select{
+  border:1px solid var(--line);border-radius:7px;
+  padding:4px 6px;font-size:11px;background:rgba(255,255,255,0.8);
+  outline:none;
+}
+.color-box{
+  display:flex;align-items:center;gap:6px;
+  border:1px solid var(--line);border-radius:8px;
+  padding:3px 10px;font-size:11px;background:rgba(255,255,255,0.8);
+}
+.color-box input[type=color]{width:20px;height:20px;border:none;background:none;padding:0;cursor:pointer;border-radius:4px}
+#customColorValue{font-family:"SF Mono",Menlo,monospace;color:var(--mut);min-width:62px}
+.tp-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.tp-actions button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
+  border:1px solid var(--line);background:rgba(255,255,255,0.6);
+  border-radius:8px;padding:6px 10px;font-size:11px;color:var(--ink);
+  transition:all .15s;
+}
+.tp-actions button:hover{background:#fff;border-color:rgba(0,0,0,0.15)}
+
+/* ============ 发布检查清单 ============ */
+.checklist{width:320px;right:20px}
+.check-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--line);
+}
+.check-item:last-child{border-bottom:none}
+.check-icon{width:18px;height:18px;flex-shrink:0;margin-top:1px}
+.check-content{flex:1;min-width:0}
+.check-label{font-size:12.5px;font-weight:600;color:var(--ink)}
+.check-desc{font-size:11px;color:var(--mut);margin-top:2px;line-height:1.4}
+.check-value{font-size:11px;font-weight:600;font-family:"SF Mono",Menlo,monospace;margin-top:2px}
+.check-value.ok{color:var(--success)}
+.check-value.warn{color:var(--warning)}
+.check-value.info{color:var(--main)}
+.check-footer{
+  margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);
+  font-size:11px;color:var(--mut);line-height:1.5;
+}
+.check-footer strong{color:var(--ink)}
+
+/* ============ Toast ============ */
+.toast{
+  position:fixed;bottom:32px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:rgba(29,29,31,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  color:#fff;font-size:13px;
+  padding:12px 24px;border-radius:14px;
+  box-shadow:0 8px 32px rgba(0,0,0,.2);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  opacity:0;z-index:60;
+  font-weight:500;
+  display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* 滚动条美化 */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.25)}
+
+@media(max-width:980px){
+  .main{grid-template-columns:1fr;overflow:auto}
+  .editor-pane{min-height:45vh;border-right:none;border-bottom:1px solid var(--line)}
+  .pop{right:16px;width:min(380px,calc(100vw - 32px))}
+  .topbar .title-in{display:none}
+  .icon-btn .btn-text{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- SVG Icons 定义 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="icon-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+    </symbol>
+    <symbol id="icon-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+      <path d="M12 18h.01"/>
+    </symbol>
+    <symbol id="icon-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="20" height="14" x="2" y="3" rx="2"/>
+      <line x1="8" x2="16" y1="21" y2="21"/>
+      <line x1="12" x2="12" y1="17" y2="21"/>
+    </symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+    </symbol>
+    <symbol id="icon-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 6h18"/>
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+    </symbol>
+    <symbol id="icon-checklist" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m3 17 2 2 4-4"/>
+      <path d="m3 7 2 2 4-4"/>
+      <path d="M13 6h8"/>
+      <path d="M13 12h8"/>
+      <path d="M13 18h8"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+      <path d="M12 9v4"/>
+      <path d="M12 17h.01"/>
+    </symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 16v-4"/>
+      <path d="M12 8h.01"/>
+    </symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" x2="12" y1="15" y2="3"/>
+    </symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" x2="12" y1="3" y2="15"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">途</div>
+    行途排版
+    <small>md2wechat v2.2</small>
+  </div>
+  <input class="title-in" id="titleIn" placeholder="文章标题（公众号标题单独填）">
+  <div class="spacer"></div>
+
+  <button class="icon-btn" id="themeBtn" onclick="toggleThemePop(event)">
+    <svg width="15" height="15"><use href="#icon-palette"/></svg>
+    <span class="btn-text" id="themeBtnText">行途蓝</span>
+    <span style="opacity:.4;font-size:10px">▾</span>
+  </button>
+
+  <button class="icon-btn active" id="viewBtn" onclick="toggleView()">
+    <svg width="15" height="15" id="viewIcon"><use href="#icon-smartphone"/></svg>
+    <span class="btn-text" id="viewBtnText">手机预览</span>
+  </button>
+
+  <button class="icon-btn" id="checkBtn" onclick="toggleCheckPop(event)">
+    <svg width="15" height="15"><use href="#icon-checklist"/></svg>
+    <span class="btn-text">发布检查</span>
+  </button>
+
+  <button class="copy-btn" onclick="copyToClipboard()">
+    <svg width="15" height="15"><use href="#icon-copy"/></svg>
+    复制到公众号
+    <span class="kbd">⌘↵</span>
+  </button>
+</div>
+
+<!-- 主题面板 -->
+<div class="pop" id="themePop" style="right:280px;width:380px">
+  <div class="pop-title">
+    <svg width="15" height="15"><use href="#icon-palette"/></svg>
+    选择主题
+  </div>
+  <div id="tpBody"></div>
+  <div class="tp-adv">
+    <label>正文图片
+      <select id="optImages" onchange="renderPreview()">
+        <option value="placeholder" title="输出占位卡，在公众号后台手动上传（最稳妥，支持本地图片）">占位卡（推荐）</option>
+        <option value="keep" title="输出真实 img 标签，http(s) 外链图公众号会自动上传到素材库；本地路径不支持">外链自动上传</option>
+        <option value="drop">忽略</option>
+      </select>
+    </label>
+    <label>外链
+      <select id="optLinks" onchange="renderPreview()">
+        <option value="text">文字+角标（推荐）</option>
+        <option value="keep">保留链接</option>
+        <option value="drop">仅文字</option>
+      </select>
+    </label>
+    <label>文末声明 <input type="checkbox" id="optFooter" checked onchange="renderPreview()"></label>
+    <div class="color-box">主色
+      <input type="color" id="customColor" value="#056DE8" onchange="applyCustomColor(this.value)">
+      <span id="customColorValue">#056DE8</span>
+    </div>
+  </div>
+  <div class="tp-actions">
+    <button onclick="exportTheme()">
+      <svg width="13" height="13"><use href="#icon-download"/></svg>
+      导出主题
+    </button>
+    <button onclick="importTheme()">
+      <svg width="13" height="13"><use href="#icon-upload"/></svg>
+      导入主题
+    </button>
+    <button onclick="resetColor()" style="color:var(--main)">重置</button>
+  </div>
+</div>
+
+<!-- 发布检查面板 -->
+<div class="pop checklist" id="checkPop">
+  <div class="pop-title">
+    <svg width="15" height="15"><use href="#icon-checklist"/></svg>
+    发布前检查清单
+  </div>
+  <div id="checkBody"></div>
+  <div class="check-footer">
+    <strong>提示：</strong>复制到公众号后，还需在后台手动填写摘要、上传封面（900×383）、开启原创声明、选择合集。本工具负责正文排版，其余项请在公众号后台完成。
+  </div>
+</div>
+
+<div class="main">
+  <div class="pane editor-pane">
+    <div class="pane-head">
+      <span>Markdown 源文</span>
+      <div class="tool-mini">
+        <button onclick="loadDemo()">
+          <svg width="12" height="12"><use href="#icon-file"/></svg>
+          载入演示
+        </button>
+        <button onclick="clearAll()">
+          <svg width="12" height="12"><use href="#icon-trash"/></svg>
+          清空
+        </button>
+      </div>
+    </div>
+    <textarea id="editor" spellcheck="false"></textarea>
+    <div class="pane-status">
+      <span id="statWords">0 字</span>
+      <span id="statBlocks">—</span>
+      <span id="statImages" style="display:none"></span>
+      <span style="margin-left:auto" id="statTheme">byte · 行途蓝</span>
+    </div>
+  </div>
+  <div class="pane preview-pane" id="previewPane">
+    <div class="preview-inner">
+      <div class="phone">
+        <div class="ph-title" id="phTitle"></div>
+        <div class="ph-meta">
+          <div class="avatar"></div>
+          <span class="author" id="phAuthor">行途技术手记 · 正文预览</span>
+        </div>
+        <div class="ph-body">
+          <div id="content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/*__ENGINE__*/
+</script>
+<script>
+'use strict';
+const S = XingTuMd;
+const $ = id => document.getElementById(id);
+const editor = $('editor');
+const content = $('content');
+let currentTheme = 'byte';
+let customColor = null;
+let isWide = false;
+const GROUPS = ['科技实战', '观点随笔', '成长故事'];
+
+/* ---------- 主题面板 ---------- */
+function buildThemePanel() {
+  const gmap = {};
+  S.themeKeys.forEach(k => { const t = S.themes[k]; (gmap[t.group] = gmap[t.group] || []).push(k); });
+  let html = '';
+  GROUPS.forEach(g => {
+    if (!gmap[g]) return;
+    html += '<div class="tp-group"><div class="tp-group-name">' + g + '</div><div class="tp-list">';
+    gmap[g].forEach(k => {
+      const t = S.themes[k];
+      html += '<button class="tp-item" data-k="' + k + '" onclick="pickTheme(\'' + k + '\')">' +
+        '<span class="dot" style="background:' + t.main + '"></span><span>' + t.name +
+        '<span class="tp-desc">' + t.desc + '</span></span></button>';
+    });
+    html += '</div></div>';
+  });
+  $('tpBody').innerHTML = html;
+}
+
+function pickTheme(k) {
+  currentTheme = k;
+  customColor = null;
+  $('customColor').value = S.themes[k].main;
+  $('customColorValue').textContent = S.themes[k].main;
+  syncThemeUI(); renderPreview();
+}
+
+/* ---------- 主题色系联动 ---------- */
+function hexToRgb(hex) {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+  const num = parseInt(full, 16);
+  return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+}
+function adjustColor(hex, amount) {
+  const { r, g, b } = hexToRgb(hex);
+  const nr = Math.min(255, Math.max(0, r + amount));
+  const ng = Math.min(255, Math.max(0, g + amount));
+  const nb = Math.min(255, Math.max(0, b + amount));
+  return '#' + ((1 << 24) + (nr << 16) + (ng << 8) + nb).toString(16).slice(1);
+}
+function rgba(hex, alpha) {
+  const { r, g, b } = hexToRgb(hex);
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+}
+function updateThemeColors(main) {
+  const root = document.documentElement;
+  root.style.setProperty('--main', main);
+  root.style.setProperty('--main-light', adjustColor(main, 40));
+  root.style.setProperty('--main-dark', adjustColor(main, -40));
+  root.style.setProperty('--main-bg', rgba(main, 0.08));
+  root.style.setProperty('--main-bg-focus', rgba(main, 0.12));
+  root.style.setProperty('--main-shadow', rgba(main, 0.25));
+  root.style.setProperty('--main-shadow-hover', rgba(main, 0.35));
+  root.style.setProperty('--main-shadow-logo', rgba(main, 0.30));
+}
+
+function syncThemeUI() {
+  const t = S.themes[currentTheme];
+  const main = customColor || t.main;
+  updateThemeColors(main);
+  if (!customColor) {
+    $('customColor').value = t.main;
+    $('customColorValue').textContent = t.main;
+  }
+  $('themeBtnText').textContent = t.name;
+  $('statTheme').textContent = currentTheme + ' · ' + t.name + ' · ' + main;
+  document.querySelectorAll('.tp-item').forEach(el => el.classList.toggle('active', el.dataset.k === currentTheme));
+}
+
+function applyCustomColor(v) {
+  customColor = v;
+  $('customColorValue').textContent = v;
+  document.querySelectorAll('.tp-item').forEach(el => el.classList.remove('active'));
+  syncThemeUI(); renderPreview();
+}
+
+function resetColor() {
+  const t = S.themes[currentTheme];
+  $('customColor').value = t.main; $('customColorValue').textContent = t.main;
+  customColor = null; syncThemeUI(); renderPreview();
+}
+
+function toggleThemePop(e) {
+  e && e.stopPropagation();
+  $('checkPop').classList.remove('show');
+  $('themePop').classList.toggle('show');
+}
+
+/* ---------- 发布检查 ---------- */
+function toggleCheckPop(e) {
+  e && e.stopPropagation();
+  $('themePop').classList.remove('show');
+  $('checkPop').classList.toggle('show');
+  if ($('checkPop').classList.contains('show')) updateChecklist();
+}
+
+function updateChecklist() {
+  const title = $('titleIn').value.trim();
+  const md = editor.value;
+  const res = S.render(md, { theme: currentTheme, color: customColor || undefined, title: title || undefined, footer: $('optFooter').checked });
+  const words = S.countWords(res.html);
+  const imgCount = (res.html.match(/图片占位/g) || []).length;
+
+  const items = [
+    {
+      icon: title ? 'check' : 'warning',
+      color: title ? 'var(--success)' : 'var(--warning)',
+      label: '文章标题',
+      desc: title ? '已填写' : '尚未填写（建议 15-30 字，含核心关键词）',
+      value: title ? title.substring(0, 20) + (title.length > 20 ? '...' : '') : '',
+      valueClass: title ? 'ok' : 'warn'
+    },
+    {
+      icon: words >= 1000 ? 'check' : (words > 0 ? 'info' : 'warning'),
+      color: words >= 1000 ? 'var(--success)' : (words > 0 ? 'var(--main)' : 'var(--warning)'),
+      label: '正文字数',
+      desc: words >= 1000 ? '字数充足' : (words > 0 ? '字数偏少，建议 1500-5000 字' : '正文为空'),
+      value: words.toLocaleString() + ' 字',
+      valueClass: words >= 1000 ? 'ok' : (words > 0 ? 'info' : 'warn')
+    },
+    {
+      icon: imgCount > 0 ? 'warning' : 'info',
+      color: imgCount > 0 ? 'var(--warning)' : 'var(--main)',
+      label: '图片数量',
+      desc: imgCount > 0 ? '需在公众号后台手动上传 ' + imgCount + ' 张图片' : '无图片（纯文字）',
+      value: imgCount + ' 张占位',
+      valueClass: imgCount > 0 ? 'warn' : 'info'
+    },
+    {
+      icon: 'info',
+      color: 'var(--main)',
+      label: '摘要（公众号后台）',
+      desc: '请在公众号后台填写，建议 50-120 字，堆叠 2-5 个核心搜索词'
+    },
+    {
+      icon: 'info',
+      color: 'var(--main)',
+      label: '封面（公众号后台）',
+      desc: '请上传封面图，建议尺寸 900×383（2.35:1）'
+    },
+    {
+      icon: 'info',
+      color: 'var(--main)',
+      label: '原创声明（公众号后台）',
+      desc: '首发文章建议开启原创声明，保护内容权益'
+    }
+  ];
+
+  let html = '';
+  items.forEach(item => {
+    html += '<div class="check-item">' +
+      '<svg class="check-icon" style="color:' + item.color + '"><use href="#icon-' + item.icon + '"/></svg>' +
+      '<div class="check-content">' +
+      '<div class="check-label">' + item.label + '</div>' +
+      '<div class="check-desc">' + item.desc + '</div>' +
+      (item.value ? '<div class="check-value ' + (item.valueClass || '') + '">' + item.value + '</div>' : '') +
+      '</div></div>';
+  });
+  $('checkBody').innerHTML = html;
+}
+
+/* ---------- 视图切换 ---------- */
+function toggleView() {
+  isWide = !isWide;
+  $('previewPane').classList.toggle('wide', isWide);
+  $('viewBtnText').textContent = isWide ? '宽屏预览' : '手机预览';
+  $('viewIcon').innerHTML = '<use href="#icon-' + (isWide ? 'monitor' : 'smartphone') + '"/>';
+  $('viewBtn').classList.toggle('active', !isWide);
+}
+
+/* ---------- 渲染 ---------- */
+function renderPreview() {
+  const md = editor.value;
+  const res = S.render(md, {
+    theme: currentTheme,
+    color: customColor || undefined,
+    title: $('titleIn').value || undefined,
+    footer: $('optFooter').checked,
+    images: $('optImages').value,
+    links: $('optLinks').value,
+  });
+  $('phTitle').textContent = res.title || '（未命名 · 请在顶部填公众号标题）';
+  content.innerHTML = res.html || '<div class="preview-empty">在左侧输入 Markdown，这里实时预览</div>';
+  const words = S.countWords(res.html);
+  const imgCount = (res.html.match(/图片占位/g) || []).length;
+  $('statWords').textContent = words.toLocaleString() + ' 字' + (words > 18000 ? ' · 超长' : '');
+  $('statBlocks').textContent = '主题渲染 · ' + S.themes[res.theme].name;
+  if (imgCount > 0) {
+    $('statImages').style.display = 'inline';
+    $('statImages').textContent = imgCount + ' 图待上传';
+  } else {
+    $('statImages').style.display = 'none';
+  }
+  if ($('checkPop').classList.contains('show')) updateChecklist();
+}
+
+/* ---------- 复制（富文本） ---------- */
+function copyToClipboard() {
+  const range = document.createRange();
+  range.selectNodeContents(content);
+  const sel = window.getSelection();
+  sel.removeAllRanges(); sel.addRange(range);
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) {}
+  sel.removeAllRanges();
+  if (ok) {
+    const words = S.countWords(content.innerHTML);
+    toast('已复制 ' + words.toLocaleString() + ' 字正文，去公众号编辑器粘贴');
+  } else {
+    toast('自动复制失败，请手动全选正文后按 Ctrl+C');
+  }
+}
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ---------- 主题导入/导出 ---------- */
+function exportTheme() {
+  const config = S.exportTheme(currentTheme);
+  config.id = currentTheme;
+  const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'md2wechat-theme-' + currentTheme + '.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('主题已导出：' + currentTheme);
+}
+
+function importTheme() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json,application/json';
+  input.onchange = function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      try {
+        const config = JSON.parse(ev.target.result);
+        if (!config.main) throw new Error('缺少 main 字段');
+        const id = config.id || ('custom_' + Date.now());
+        delete config.id;
+        S.registerTheme(id, config);
+        currentTheme = id;
+        buildThemePanel();
+        syncThemeUI();
+        renderPreview();
+        toast('主题已导入：' + (config.name || id));
+      } catch (err) {
+        toast('导入失败：' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+/* ---------- 编辑器 ---------- */
+let timer = null;
+editor.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(renderPreview, 120); });
+$('titleIn').addEventListener('input', renderPreview);
+function clearAll() { editor.value = ''; renderPreview(); }
+
+/* ---------- 各主题专属演示内容 ---------- */
+const DEMO_CONTENT = {
+  // byte 行途蓝：技术实战文（默认）
+  byte: `# AI 时代的工程师工具箱
+
+> 一份轻量的排版演示稿，展示 md2wechat 支持的所有排版元素。点击右上角主题可随时换肤。
+
+## 一、核心工具链
+
+AI 时代的工程师，不再只是写代码的人，而是**会用工具放大生产力的人**。
+
+- **代码编辑器**：VS Code / Neovim，配合 AI 插件实现智能补全
+  - 关键配置：\`editor.formatOnSave\` + \`editor.codeActionsOnSave\`
+  - 推荐插件：GitHub Copilot / Cursor / Trae
+- **终端工具**：iTerm2 / Warp，配合 Oh My Zsh 提升效率
+- **笔记系统**：Obsidian / Logseq，构建个人知识图谱
+
+> 工具不会替代人，但会用工具的人会替代不会用的人。
+
+## 二、效率演示区
+
+### 代码块（Mac 视窗风）
+
+\`\`\`python
+def ai_workflow(prompt: str) -> str:
+    """AI 工作流：提示词 → 模型 → 结果校验"""
+    result = model.generate(prompt)
+    verified = verify(result)
+    return verified if verified else retry(prompt)
+\`\`\`
+
+### 表格 · 工具对比
+
+| 类别 | 工具 | 核心优势 | 学习成本 |
+| :--- | :--: | :-----: | ---: |
+| 编辑器 | VS Code | 生态丰富 | 低 |
+| 终端 | Warp | AI 原生 | 中 |
+| 笔记 | Obsidian | 本地优先 | 中 |
+| 自动化 | n8n | 可视化编排 | 高 |
+
+### 图片占位与图注
+
+![AI 时代的工程师工作台示意图](https://example.com/workspace.jpg)
+
+*图注：工具是放大器，人才是核心。*
+
+## 三、我的工具观
+
+工具不是目的，**解决问题才是**。选择工具的标准：能不能帮你更快、更好、更稳地解决问题。
+
+---
+
+**行途技术手记** | 关注 AI 时代的工程师成长与效率提升。
+排版 | md2wechat 行途排版引擎（v2.2）\\
+声明：未经授权，禁止抓取本文用于训练 AI 大模型。`,
+
+  // editorial 编辑杂志风：深度长文/人物故事
+  editorial: `# 一个技术人的十年
+
+> 写在前面：这不是一篇成功学，而是一个普通人的十年。如果你也在技术的路上迷茫，希望这篇文字能给你一点温度。
+
+## 一、起点
+
+十年前的今天，我第一次走进电脑城。那时候我以为，技术就是修电脑。
+
+后来我才明白，**技术从来不是工具，而是解决问题的方式**。修电脑是技术，写代码是技术，甚至把一件复杂的事情拆解成简单的步骤，也是技术。
+
+- 2015 年：第一次写下 \`Hello World\`，激动得睡不着
+- 2017 年：第一次独立完成项目，虽然代码烂得一塌糊涂
+- 2019 年：第一次带团队，才发现管人比写代码难多了
+
+> 每一个第一次，都是成长的刻度。
+
+## 二、转折
+
+2020 年是我的转折点。那一年，我开始写作。
+
+不是为了成为作家，而是为了**想清楚自己到底在做什么**。写着写着，我发现：
+
+1. 写作是最好的思考工具
+2. 分享是最好的学习方式
+3. 连接是最好的成长路径
+
+### 那些改变我的书
+
+| 书名 | 作者 | 核心收获 |
+| :--- | :--- | :--- |
+| 《深度工作》 | 卡尔·纽波特 | 专注是这个时代最稀缺的能力 |
+| 《原则》 | 瑞·达利欧 | 把经验沉淀成原则，才能复利 |
+| 《黑客与画家》 | 保罗·格雷厄姆 | 创造者的思维方式 |
+
+![深夜的书桌，灯还亮着](https://example.com/desk.jpg)
+
+*图注：无数个这样的夜晚，构成了我的十年。*
+
+## 三、现在
+
+十年过去了，我依然在写代码，依然在学习，依然在迷茫。
+
+但我不再害怕迷茫了。因为我知道，**迷茫说明你还在思考，还在成长**。
+
+---
+
+**行途技术手记** | 一个技术人的真实记录，愿我们都能在技术的路上找到自己的节奏。
+排版 | md2wechat 行途排版引擎（v2.2）`,
+
+  // terminal 终端极客风：CLI 教程/技术硬核
+  terminal: `# 命令行效率指南：从入门到上瘾
+
+> 如果你还在用鼠标点点点，这篇文章会让你重新认识终端。命令行不是极客的玩具，而是效率的核武器。
+
+## 一、为什么要用命令行
+
+很简单：**快**。
+
+- 鼠标操作：移动手 → 找到图标 → 双击 → 等待加载 → 点击菜单 → 选择选项
+- 命令行：手不用离开键盘，敲几个字符，回车，完事
+
+更重要的是，命令行可以**自动化**。把重复的操作写成脚本，一次编写，终身受益。
+
+\`\`\`bash
+# 一行命令：查找当前目录下所有大于 100MB 的文件并按大小排序
+find . -type f -size +100M -exec ls -lh {} \\; | awk '{print $5, $9}' | sort -hr
+\`\`\`
+
+## 二、必备命令速查
+
+### 文件操作
+
+| 命令 | 用途 | 示例 |
+| :--- | :--- | :--- |
+| \`ls\` | 列出文件 | \`ls -lah\` |
+| \`cd\` | 切换目录 | \`cd ~/projects\` |
+| \`mkdir\` | 创建目录 | \`mkdir -p a/b/c\` |
+| \`rm\` | 删除文件 | \`rm -rf node_modules\` |
+| \`cp\` | 复制文件 | \`cp -r src dist\` |
+
+### 文本处理
+
+\`\`\`bash
+# 统计代码行数
+find . -name "*.js" | xargs wc -l | tail -1
+
+# 查找包含关键词的文件
+grep -rn "TODO" --include="*.py" .
+
+# 批量替换文本
+sed -i 's/old/new/g' *.md
+\`\`\`
+
+![终端界面截图，满屏代码在滚动](https://example.com/terminal.jpg)
+
+*图注：终端不是黑框框，是你的第二大脑。*
+
+## 三、进阶技巧
+
+1. **别名（alias）**：把常用命令缩短，比如 \`alias gs="git status"\`
+2. **管道（pipe）**：用 \`|\` 把多个命令连起来，数据流式处理
+3. **历史记录**：用 \`Ctrl+R\` 搜索历史命令，不用重复敲
+4. **脚本化**：把重复操作写成 \`.sh\` 文件，一次执行
+
+> 命令行的精髓不是记命令，而是**组合命令解决问题**。
+
+---
+
+**行途技术手记** | 关注技术效率与工程实践。
+排版 | md2wechat 行途排版引擎（v2.2）`,
+
+  // pure 纯文字随笔：随笔感悟
+  pure: `# 关于写作的一些碎碎念
+
+> 写了这么多年，越来越觉得，写作不是为了别人，而是为了自己。
+
+## 一、为什么写
+
+有人问我，你写这些有人看吗？
+
+我说，**我写不是为了有人看，是为了自己想清楚**。
+
+很多事情，你以为你想清楚了，一写才发现，根本没有。写不下去的地方，就是你没想明白的地方。
+
+写作是一面镜子，照出你思维的漏洞。
+
+## 二、写什么
+
+什么都可以写。
+
+- 今天学到的一个新东西
+- 昨天犯的一个错误
+- 对某件事的看法
+- 甚至只是一段情绪
+
+> 不要等"准备好了"再写，永远没有准备好的时候。写着写着，就准备好了。
+
+## 三、怎么写
+
+很简单：**坐下来，写**。
+
+不要一开始就追求完美。先写出来，再改。第一稿永远是垃圾，但没有第一稿，就没有第二稿。
+
+我常用的方法：
+
+1. 先写标题，哪怕是临时的
+2. 列三个要点，不管逻辑对不对
+3. 每个要点写一段话，想到什么写什么
+4. 写完放一天，再回来改
+
+![窗外的雨，桌上的咖啡，电脑开着](https://example.com/writing.jpg)
+
+*图注：写作是一场和自己的对话。*
+
+## 四、最后
+
+写作不会让你一夜成名，也不会让你立刻暴富。
+
+但它会让你**越来越清楚自己是谁，想要什么**。
+
+这就够了。
+
+---
+
+**行途技术手记** | 一个技术人的随笔，想到什么写什么。
+排版 | md2wechat 行途排版引擎（v2.2）`,
+
+  // warm 暖调故事：故事情感
+  warm: `# 深夜的便利店
+
+> 城市睡着了，便利店还醒着。那些深夜里的人和事，构成了这座城市最温暖的角落。
+
+## 一、凌晨两点
+
+凌晨两点，我走进楼下的便利店。
+
+店员是个年轻的小伙子，正在整理货架。看到我进来，他笑了笑："还是老样子？"
+
+我点点头。一杯热豆浆，一个茶叶蛋。
+
+这是我加班晚归的标配。
+
+> 有些温暖，不是惊天动地的大事，而是有人记得你的"老样子"。
+
+## 二、那些深夜的客人
+
+在便利店待久了，你会遇到各种各样的人。
+
+- **刚下班的护士**：总是买一瓶酸奶，坐在窗边喝完再走
+- **夜班的网约车司机**：冬天会买一杯热可可，蹲在门口喝完
+- **复习的学生**：买一杯咖啡，坐在角落看书到天亮
+- **喝醉的大叔**：买一瓶矿泉水，坐在门口打电话，说着说着就哭了
+
+每个人都有自己的故事，便利店是这些故事短暂交汇的地方。
+
+### 深夜菜单
+
+| 时间 | 最受欢迎的商品 | 典型客人 |
+| :--- | :--- | :--- |
+| 23:00 | 泡面 + 火腿肠 | 加班族 |
+| 01:00 | 热豆浆 + 茶叶蛋 | 夜班工作者 |
+| 03:00 | 咖啡 + 三明治 | 出租车司机 |
+| 05:00 | 包子 + 粥 | 早起的老人 |
+
+![便利店的灯光，在深夜里格外温暖](https://example.com/convenience.jpg)
+
+*图注：那盏灯，是给晚归人的承诺。*
+
+## 三、天亮了
+
+凌晨五点，天开始亮了。
+
+我喝完最后一口豆浆，走出便利店。街上已经有了早起的人，卖早餐的推车冒着热气，环卫工人在扫街。
+
+新的一天开始了。
+
+而那盏便利店的灯，还亮着。
+
+> 城市不会因为深夜就停止运转，总有人在你看不见的地方，默默守护着这座城市的温度。
+
+---
+
+**行途技术手记** | 记录那些平凡而温暖的瞬间。
+排版 | md2wechat 行途排版引擎（v2.2）`
+};
+
+function loadDemo() {
+  const demo = DEMO_CONTENT[currentTheme] || DEMO_CONTENT.byte;
+  editor.value = demo;
+  renderPreview();
+}
+
+/* ---------- 快捷键 ---------- */
+document.addEventListener('keydown', function (e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    e.preventDefault();
+    copyToClipboard();
+  }
+});
+
+/* ---------- 点击外部关闭弹出面板 ---------- */
+document.addEventListener('click', e => {
+  if (!$('themePop').contains(e.target) && !$('themeBtn').contains(e.target)) $('themePop').classList.remove('show');
+  if (!$('checkPop').contains(e.target) && !$('checkBtn').contains(e.target)) $('checkPop').classList.remove('show');
+});
+
+/* ---------- init ---------- */
+const initTheme = new URL(location.href).searchParams.get('theme');
+if (initTheme && S.themes[initTheme]) currentTheme = initTheme;
+buildThemePanel();
+syncThemeUI();
+loadDemo();
+</script>
+</body>
+</html>

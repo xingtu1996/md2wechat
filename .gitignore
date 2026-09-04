@@ -1,0 +1,36 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env & Secrets
+.env
+.env.*
+*.key
+*.pem
+
+# Build
+node_modules/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+logs/
+
+# Backup
+*.bak
+.backups/
+.trash/
+
+# md2wechat 自身产物（保留示例 demo 给 boss 看，其他可忽略）
+*.公众号版.html
+!examples/*.公众号版.html
+
+# 截图（旧主题名预览，后续更新后再加入仓库）
+screenshots/
