@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="zh-CN" data-page-node-id="1qBlkDhDOruQBd2Payst6w">
+<head data-page-node-id="ByeUjMvtA0KahlH9n6GrKK">
+<meta charset="UTF-8" data-page-node-id="amNgbmHalQAY6CmsyW7HV3">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="erjEMtJORE0x565913PhB1">
 <title>行途排版 · md2wechat v2.2</title>
 <style>
 :root{
@@ -270,197 +270,197 @@ svg{display:block;flex-shrink:0}
 }
 </style>
 </head>
-<body>
+<body data-page-node-id="1DZ57F54K3lZ8VIqdNgkJC">
 
 <!-- SVG Icons 定义 -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <symbol id="icon-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
-      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
-      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
-      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
-      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+<svg width="0" height="0" style="position:absolute" data-page-node-id="XomN7teUsnU9CTSkwNoZpM">
+  <defs data-page-node-id="VVM6OOOIenacsFcUgi40Am">
+    <symbol id="icon-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="fznE6lWzpmlfHWuf1oTvft">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" data-page-node-id="pRYQ6kpIksQoig6KcWdgmE"/>
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" data-page-node-id="ORqrBMSnRXSUAhppfJWKOq"/>
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" data-page-node-id="2mLA9PP7U5enNayDDS2D5z"/>
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" data-page-node-id="3ChIdEJ3R3NCBCCAR986vj"/>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" data-page-node-id="PXk4PBkMmAFvy6tyuf4QV8"/>
     </symbol>
-    <symbol id="icon-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
-      <path d="M12 18h.01"/>
+    <symbol id="icon-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="uQ6OQ8um4MiXXbav2Mdhya">
+      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" data-page-node-id="5vkVGYD4FHPZGclSwxpKWt"/>
+      <path d="M12 18h.01" data-page-node-id="sYcsDBPGFvZ2PUDWnP8Tql"/>
     </symbol>
-    <symbol id="icon-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect width="20" height="14" x="2" y="3" rx="2"/>
-      <line x1="8" x2="16" y1="21" y2="21"/>
-      <line x1="12" x2="12" y1="17" y2="21"/>
+    <symbol id="icon-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="eBrhOL45wWxCri6aU67eHe">
+      <rect width="20" height="14" x="2" y="3" rx="2" data-page-node-id="kE5ZzEBGD6o3XOVlHLfhIB"/>
+      <line x1="8" x2="16" y1="21" y2="21" data-page-node-id="cbrPK5VwqEsQbj37XZBDGn"/>
+      <line x1="12" x2="12" y1="17" y2="21" data-page-node-id="cJRHHyNhq7WpWw45l16czW"/>
     </symbol>
-    <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+    <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="xAksuyPG6xFPWeoBUnjMnm">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" data-page-node-id="8Wt2bwlKyXbqngdsN12HEG"/>
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" data-page-node-id="afGHv4arwvwGK94SbvFfkg"/>
     </symbol>
-    <symbol id="icon-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+    <symbol id="icon-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="PGg6Uaqwkj8FkzqFvTBtFk">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" data-page-node-id="uE9tYm5GJCGKPnrgtqIqjh"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4" data-page-node-id="7VyplsqiygaBR7XLIEMgcT"/>
     </symbol>
-    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 6h18"/>
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="aKcqF24yczmkpMSDW6JdsG">
+      <path d="M3 6h18" data-page-node-id="v1IFszTAJMEfZBuoaBVAzN"/>
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" data-page-node-id="SY0rF55PJmdkBur9JJhD4U"/>
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" data-page-node-id="2HCu9TkxEjL2DtyrtJr0bZ"/>
     </symbol>
-    <symbol id="icon-checklist" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m3 17 2 2 4-4"/>
-      <path d="m3 7 2 2 4-4"/>
-      <path d="M13 6h8"/>
-      <path d="M13 12h8"/>
-      <path d="M13 18h8"/>
+    <symbol id="icon-checklist" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Ezw7GzWYPa37Wf9oPrEbUa">
+      <path d="m3 17 2 2 4-4" data-page-node-id="80rKDFfTbUfVINc4ygDhE6"/>
+      <path d="m3 7 2 2 4-4" data-page-node-id="F2kyZgEVE8MhZzOpScg7Hh"/>
+      <path d="M13 6h8" data-page-node-id="mJSeDvKkSBJUm4usicCdrB"/>
+      <path d="M13 12h8" data-page-node-id="nAs36CF6LM1yhrMmZqC41H"/>
+      <path d="M13 18h8" data-page-node-id="YLhVfQ9aeOdh011xw0rdWf"/>
     </symbol>
-    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20 6 9 17l-5-5"/>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="f4kDC3FFmE5fb6xHAWGvFb">
+      <path d="M20 6 9 17l-5-5" data-page-node-id="mqTjG3mxiZDUn7TMROcUeR"/>
     </symbol>
-    <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-      <path d="M12 9v4"/>
-      <path d="M12 17h.01"/>
+    <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="WzNiX9MHrUY6bwAzL45LrD">
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" data-page-node-id="Ou9UPNpteL0QqEwMuZhLOG"/>
+      <path d="M12 9v4" data-page-node-id="58dVzNPEcxPzAYkbSKF0Fu"/>
+      <path d="M12 17h.01" data-page-node-id="fvxSZoVqXXkXU98cF653b5"/>
     </symbol>
-    <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <path d="M12 16v-4"/>
-      <path d="M12 8h.01"/>
+    <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="6kHIsQHmeu7ISHDW98o4eJ">
+      <circle cx="12" cy="12" r="10" data-page-node-id="pA8cHf2hAxtJBBsBd8J0Bd"/>
+      <path d="M12 16v-4" data-page-node-id="HlDG6v7HFvlIkEgJu6A3Ew"/>
+      <path d="M12 8h.01" data-page-node-id="y16nQ9TTbw7gRB2mVWRSXK"/>
     </symbol>
-    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="7 10 12 15 17 10"/>
-      <line x1="12" x2="12" y1="15" y2="3"/>
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="thfbCGRot3SHEXNzlKU1ml">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" data-page-node-id="geyZhkmSI4FDqMwjNqtQDo"/>
+      <polyline points="7 10 12 15 17 10" data-page-node-id="0arEKrRsfpAR6IddlTQN4T"/>
+      <line x1="12" x2="12" y1="15" y2="3" data-page-node-id="a4cj6Rr5uQi6AHzT5BvSUg"/>
     </symbol>
-    <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="17 8 12 3 7 8"/>
-      <line x1="12" x2="12" y1="3" y2="15"/>
+    <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="w41fxZ4EfMb5HkQRxQn5dm">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" data-page-node-id="ilo9c2A2OcFHzQJgKuJ4p7"/>
+      <polyline points="17 8 12 3 7 8" data-page-node-id="L6Tah3Ou7fVuOPwbEc160l"/>
+      <line x1="12" x2="12" y1="3" y2="15" data-page-node-id="vTeQBGgZPe48t0NgPXcsct"/>
     </symbol>
   </defs>
 </svg>
 
-<div class="topbar">
-  <div class="brand">
-    <div class="logo">途</div>
+<div class="topbar" data-page-node-id="amMZVOx7aUItnn0mfi8BQe">
+  <div class="brand" data-page-node-id="1A1hWhAEPw1DATIPcERwC0">
+    <div class="logo" data-page-node-id="OPdLoeuH2J2UDqfMjQ7DPU">途</div>
     行途排版
-    <small>md2wechat v2.2</small>
+    <small data-page-node-id="OS21T6DHWvSDAIDoXSxcmK">md2wechat v2.2</small>
   </div>
-  <input class="title-in" id="titleIn" placeholder="文章标题（公众号标题单独填）">
-  <div class="spacer"></div>
+  <input class="title-in" id="titleIn" placeholder="文章标题（公众号标题单独填）" data-page-node-id="5zHjhKOWfiEISfBcXFjrjB">
+  <div class="spacer" data-page-node-id="7o4Hnh6sPxitJ5OcWkp74p"></div>
 
-  <button class="icon-btn" id="themeBtn" onclick="toggleThemePop(event)">
-    <svg width="15" height="15"><use href="#icon-palette"/></svg>
-    <span class="btn-text" id="themeBtnText">行途蓝</span>
-    <span style="opacity:.4;font-size:10px">▾</span>
+  <button class="icon-btn" id="themeBtn" onclick="toggleThemePop(event)" data-page-node-id="K9rNJFTIEQv4H6D2byW2oH">
+    <svg width="15" height="15" data-page-node-id="6JVO724JqtDN6qZtqaOcEJ"><use href="#icon-palette" data-page-node-id="ujV8X4wN6H7oiotM1FWhcO"/></svg>
+    <span class="btn-text" id="themeBtnText" data-page-node-id="ALiCotMVo1o24K9sDuHcJg">行途蓝</span>
+    <span style="opacity:.4;font-size:10px" data-page-node-id="I9uFhdssIb9Wn9hDOq58Hh">▾</span>
   </button>
 
-  <button class="icon-btn active" id="viewBtn" onclick="toggleView()">
-    <svg width="15" height="15" id="viewIcon"><use href="#icon-smartphone"/></svg>
-    <span class="btn-text" id="viewBtnText">手机预览</span>
+  <button class="icon-btn active" id="viewBtn" onclick="toggleView()" data-page-node-id="oZnvEMrfZnHIfGakbqjgfi">
+    <svg width="15" height="15" id="viewIcon" data-page-node-id="n7ex60QXz8KMa7xIcSwTTk"><use href="#icon-smartphone" data-page-node-id="A0mBR43AASBHbXMfC0fHYY"/></svg>
+    <span class="btn-text" id="viewBtnText" data-page-node-id="2d0RbXYUDwekIS1gUdDSi7">手机预览</span>
   </button>
 
-  <button class="icon-btn" id="checkBtn" onclick="toggleCheckPop(event)">
-    <svg width="15" height="15"><use href="#icon-checklist"/></svg>
-    <span class="btn-text">发布检查</span>
+  <button class="icon-btn" id="checkBtn" onclick="toggleCheckPop(event)" data-page-node-id="KznBzD6s39hC28LHZXxiA4">
+    <svg width="15" height="15" data-page-node-id="mUpHfRr5z2jyk7fsPQUQQs"><use href="#icon-checklist" data-page-node-id="f5RvZvBGTCynF0Oscs7OgE"/></svg>
+    <span class="btn-text" data-page-node-id="JG1QsBcqvav5tvX68o1hu7">发布检查</span>
   </button>
 
-  <button class="copy-btn" onclick="copyToClipboard()">
-    <svg width="15" height="15"><use href="#icon-copy"/></svg>
+  <button class="copy-btn" onclick="copyToClipboard()" data-page-node-id="0UHaxxMx2mBNyGVQieNlG6">
+    <svg width="15" height="15" data-page-node-id="g3I80DtwdpzywsLOvi6Uib"><use href="#icon-copy" data-page-node-id="4GX9yuFnFhMsOQfQj68H33"/></svg>
     复制到公众号
-    <span class="kbd">⌘↵</span>
+    <span class="kbd" data-page-node-id="N9Xiebq5fTYjwPARlwnCGF">⌘↵</span>
   </button>
 </div>
 
 <!-- 主题面板 -->
-<div class="pop" id="themePop" style="right:280px;width:380px">
-  <div class="pop-title">
-    <svg width="15" height="15"><use href="#icon-palette"/></svg>
+<div class="pop" id="themePop" style="right:280px;width:380px" data-page-node-id="ogZbBT5Eyq5qTvZNDxcHf4">
+  <div class="pop-title" data-page-node-id="YziJiS9dl6jjlq5pHIavAH">
+    <svg width="15" height="15" data-page-node-id="HIKgn1bBLv48BBaKric9r7"><use href="#icon-palette" data-page-node-id="pqFavOZ5ebmMHSxDJhv6xw"/></svg>
     选择主题
   </div>
-  <div id="tpBody"></div>
-  <div class="tp-adv">
-    <label>正文图片
-      <select id="optImages" onchange="renderPreview()">
-        <option value="placeholder" title="输出占位卡，在公众号后台手动上传（最稳妥，支持本地图片）">占位卡（推荐）</option>
-        <option value="keep" title="输出真实 img 标签，http(s) 外链图公众号会自动上传到素材库；本地路径不支持">外链自动上传</option>
-        <option value="drop">忽略</option>
+  <div id="tpBody" data-page-node-id="iyryBQY4dgG7SHuAlqumCM"></div>
+  <div class="tp-adv" data-page-node-id="t2ULJO04LYz9iTOzHI0q1m">
+    <label data-page-node-id="X85X2Q9mLPfxGHgD7ZkRgY">正文图片
+      <select id="optImages" onchange="renderPreview()" data-page-node-id="WBrQWsPEelaHHBEudGQ2cy">
+        <option value="placeholder" title="输出占位卡，在公众号后台手动上传（最稳妥，支持本地图片）" data-page-node-id="l41eEKNITlVPEGligpL1Aq">占位卡（推荐）</option>
+        <option value="keep" title="输出真实 img 标签，http(s) 外链图公众号会自动上传到素材库；本地路径不支持" data-page-node-id="50fNuQG2yGaNbpCdiyeWsZ">外链自动上传</option>
+        <option value="drop" data-page-node-id="IDdB2uBfCjrPmk61tPJQpu">忽略</option>
       </select>
     </label>
-    <label>外链
-      <select id="optLinks" onchange="renderPreview()">
-        <option value="text">文字+角标（推荐）</option>
-        <option value="keep">保留链接</option>
-        <option value="drop">仅文字</option>
+    <label data-page-node-id="6adVJhNDGYK7AEY6QKFgeZ">外链
+      <select id="optLinks" onchange="renderPreview()" data-page-node-id="WMRZKRtvF7MAETyNGLDKsn">
+        <option value="text" data-page-node-id="2UdxwwlBmJuxHLRKnEQKt7">文字+角标（推荐）</option>
+        <option value="keep" data-page-node-id="fnsYYgM1fVCvlZxDjFxY36">保留链接</option>
+        <option value="drop" data-page-node-id="HkVkHIH8AB0CMYxvbSCHyK">仅文字</option>
       </select>
     </label>
-    <label>文末声明 <input type="checkbox" id="optFooter" checked onchange="renderPreview()"></label>
-    <div class="color-box">主色
-      <input type="color" id="customColor" value="#056DE8" onchange="applyCustomColor(this.value)">
-      <span id="customColorValue">#056DE8</span>
+    <label data-page-node-id="kqs5EkyQ0AukBAz4L4HkoE">文末声明 <input type="checkbox" id="optFooter" checked onchange="renderPreview()" data-page-node-id="QBBivFfsCnGBFg3HEoziSo"></label>
+    <div class="color-box" data-page-node-id="aKl20RdQEtR1clKWDdrj4F">主色
+      <input type="color" id="customColor" value="#056DE8" onchange="applyCustomColor(this.value)" data-page-node-id="BNRTJv8pw9YiPnZKxFAVdS">
+      <span id="customColorValue" data-page-node-id="3MBD7kd2MWAubsEdqXuQLA">#056DE8</span>
     </div>
   </div>
-  <div class="tp-actions">
-    <button onclick="exportTheme()">
-      <svg width="13" height="13"><use href="#icon-download"/></svg>
+  <div class="tp-actions" data-page-node-id="7ZHcIdWyrcscWukw9smhC9">
+    <button onclick="exportTheme()" data-page-node-id="zFXIc9wDoleagzQgk6F2k9">
+      <svg width="13" height="13" data-page-node-id="lZCsL260cKXGiZX6yuw7va"><use href="#icon-download" data-page-node-id="Dbihgu1jq6yqnsQbEQBNA0"/></svg>
       导出主题
     </button>
-    <button onclick="importTheme()">
-      <svg width="13" height="13"><use href="#icon-upload"/></svg>
+    <button onclick="importTheme()" data-page-node-id="QCdLE4urQ4G1BdzolXmMaY">
+      <svg width="13" height="13" data-page-node-id="iBU0xknFkoB24EDpJW6cG5"><use href="#icon-upload" data-page-node-id="qkcTHNmM5wCGXACwwP4EOm"/></svg>
       导入主题
     </button>
-    <button onclick="resetColor()" style="color:var(--main)">重置</button>
+    <button onclick="resetColor()" style="color:var(--main)" data-page-node-id="JnxXzOhUmMR4NIxGIImp2D">重置</button>
   </div>
 </div>
 
 <!-- 发布检查面板 -->
-<div class="pop checklist" id="checkPop">
-  <div class="pop-title">
-    <svg width="15" height="15"><use href="#icon-checklist"/></svg>
+<div class="pop checklist" id="checkPop" data-page-node-id="d2B7baIDmUwyJvrrefH4dw">
+  <div class="pop-title" data-page-node-id="ATAM1iuJFKbHN2583ZBfOu">
+    <svg width="15" height="15" data-page-node-id="lODpxEOkKMMaTuVnKwHwVO"><use href="#icon-checklist" data-page-node-id="sbrgf50mP8javGEpeKTBOI"/></svg>
     发布前检查清单
   </div>
-  <div id="checkBody"></div>
-  <div class="check-footer">
-    <strong>提示：</strong>复制到公众号后，还需在后台手动填写摘要、上传封面（900×383）、开启原创声明、选择合集。本工具负责正文排版，其余项请在公众号后台完成。
+  <div id="checkBody" data-page-node-id="99PJF6VYzBDT373rvJSLut"></div>
+  <div class="check-footer" data-page-node-id="Kriz5ltf0UZH9QrhPCihSx">
+    <strong data-page-node-id="6u4ltosDtgemDDVwpFW0fs">提示：</strong>复制到公众号后，还需在后台手动填写摘要、上传封面（900×383）、开启原创声明、选择合集。本工具负责正文排版，其余项请在公众号后台完成。
   </div>
 </div>
 
-<div class="main">
-  <div class="pane editor-pane">
-    <div class="pane-head">
-      <span>Markdown 源文</span>
-      <div class="tool-mini">
-        <button onclick="loadDemo()">
-          <svg width="12" height="12"><use href="#icon-file"/></svg>
+<div class="main" data-page-node-id="IhgIGBVaDkAXZDaRXE14LG">
+  <div class="pane editor-pane" data-page-node-id="1B5FNpeA4zLcfgFPOVujUU">
+    <div class="pane-head" data-page-node-id="MAiU0cb8LHGR6LWQiHVIBJ">
+      <span data-page-node-id="4ZVjUMboQBu3eeiXHar9OF">Markdown 源文</span>
+      <div class="tool-mini" data-page-node-id="TWKKKoRwuATEZNNckk2Aea">
+        <button onclick="loadDemo()" data-page-node-id="t9wT2qSpmHYzmBK7zCti8y">
+          <svg width="12" height="12" data-page-node-id="ZbEMGbetRPrhcqnejTAwxt"><use href="#icon-file" data-page-node-id="jG0S7XBwtKY6cuPukmok6I"/></svg>
           载入演示
         </button>
-        <button onclick="clearAll()">
-          <svg width="12" height="12"><use href="#icon-trash"/></svg>
+        <button onclick="clearAll()" data-page-node-id="TNNe0pbF6iiL5Ill72knB9">
+          <svg width="12" height="12" data-page-node-id="DULnPB0D4DaEGdDtOvJEBz"><use href="#icon-trash" data-page-node-id="vvO9OblAv8KTDN0k5LZBWw"/></svg>
           清空
         </button>
       </div>
     </div>
     <textarea id="editor" spellcheck="false"></textarea>
-    <div class="pane-status">
-      <span id="statWords">0 字</span>
-      <span id="statBlocks">—</span>
-      <span id="statImages" style="display:none"></span>
-      <span style="margin-left:auto" id="statTheme">byte · 行途蓝</span>
+    <div class="pane-status" data-page-node-id="2sxxgILX9zVGxzrwyBwAAG">
+      <span id="statWords" data-page-node-id="TiO9qb8tBvY4bMLrLpk8xo">0 字</span>
+      <span id="statBlocks" data-page-node-id="uP8CIKlG6ruYTzoPm6GZhU">—</span>
+      <span id="statImages" style="display:none" data-page-node-id="22GGXGGDiArFQFZMCOxGx0"></span>
+      <span style="margin-left:auto" id="statTheme" data-page-node-id="2ze2g6hLeCEvI9Yj7Mx2cE">byte · 行途蓝</span>
     </div>
   </div>
-  <div class="pane preview-pane" id="previewPane">
-    <div class="preview-inner">
-      <div class="phone">
-        <div class="ph-title" id="phTitle"></div>
-        <div class="ph-meta">
-          <div class="avatar"></div>
-          <span class="author" id="phAuthor">行途技术手记 · 正文预览</span>
+  <div class="pane preview-pane" id="previewPane" data-page-node-id="NbWpm3owUjrQfJDtcDjrUE">
+    <div class="preview-inner" data-page-node-id="1ZscI5o3FnAW94c2YNA60H">
+      <div class="phone" data-page-node-id="BxJSNlnX7On5tMDDRc7stP">
+        <div class="ph-title" id="phTitle" data-page-node-id="tNf4KPN7dBtBgYCknciCBl"></div>
+        <div class="ph-meta" data-page-node-id="TPE9tXuGTEgdA1uCPKwSp0">
+          <div class="avatar" data-page-node-id="VIkAvWmtRmGWOu8jDq72Oy"></div>
+          <span class="author" id="phAuthor" data-page-node-id="7ccyXHBzXZHhMnKzFNwDz6">行途技术手记 · 正文预览</span>
         </div>
-        <div class="ph-body">
-          <div id="content"></div>
+        <div class="ph-body" data-page-node-id="yw9SDWFAxFHJxg1FEgGWrC">
+          <div id="content" data-page-node-id="TEsEH3FCqRPrmaOqCtGmQ9"></div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" data-page-node-id="3DhsDWK7NGbBPPbL4f4KNG"></div>
 
 <script>
 /**
@@ -924,7 +924,7 @@ svg{display:block;flex-shrink:0}
         if (i < lines.length) i++;
         const codeHtml = esc(buf.join('\n'));
         const dots = S.preDots
-          ? '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + t.dotRed + ';margin-right:6px;"></span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + t.dotYellow + ';margin-right:6px;"></span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + t.dotGreen + ';"></span>'
+          ? '<span style="color:' + t.dotRed + ';font-size:12px;margin-right:4px;line-height:1;">●</span><span style="color:' + t.dotYellow + ';font-size:12px;margin-right:4px;line-height:1;">●</span><span style="color:' + t.dotGreen + ';font-size:12px;line-height:1;">●</span>'
           : '';
         const langHtml = lang ? '<span style="color:#7a828e;font-size:11px;margin-left:auto;">' + esc(lang) + '</span>' : '';
         out.push(
