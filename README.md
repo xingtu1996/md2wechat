@@ -1,14 +1,14 @@
 # 墨排 · md2wechat 行途排版引擎
 
-> **Markdown → 微信公众号排版** · 零依赖、全内联样式、10 主题、CLI + 单文件离线工作台、AI 友好
+> **Markdown → 微信公众号排版** · 零依赖、全内联样式、12 主题、CLI + 单文件离线工作台、AI 友好
 >
 > **行途出品** — 从真实公众号发布流程中沉淀的排版工具，先给自己用，再开源分享。
 >
 > 产品名「墨排」：墨 = 文字/内容，排 = 排版。匠人精神，把每一篇文章排好。
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-v2.2.1-blue.svg)
-![Engine](https://img.shields.io/badge/engine-v2.2-blue.svg)
+![Version](https://img.shields.io/badge/version-v2.3.0-blue.svg)
+![Engine](https://img.shields.io/badge/engine-v2.3-blue.svg)
 ![Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D14-lightgrey.svg)
 ![AI Friendly](https://img.shields.io/badge/AI--friendly-%E2%9C%93-orange.svg)
@@ -30,7 +30,7 @@
 
 - 左侧 Markdown 编辑器，右侧实时预览
 - 顶部一键「复制到公众号」（快捷键 ⌘/Ctrl + Enter）
-- 10 主题切换 + 自定义主色 + **整体色系联动**（切换主题时整个工作台色系跟着变）
+- 12 主题切换 + 自定义主色 + **整体色系联动**（切换主题时整个工作台色系跟着变）
 - **主题专属演示**（每个主题加载对应风格的演示内容）
 - 手机 ↔ 宽屏预览切换
 - 字数实时统计 + **发布检查清单**（标题/字数/图片/摘要/封面/原创 6 项实时状态）
@@ -42,7 +42,7 @@
 # 转换文章（默认输出同目录 .公众号版.html）
 node bin/md2wechat.js examples/demo.md
 
-# 指定主题（10 主题可选）
+# 指定主题（12 主题可选）
 node bin/md2wechat.js examples/demo.md --theme editorial
 
 # 自定义主色（覆盖当前主题）
@@ -98,7 +98,7 @@ const theme = XingTuMd.getTheme('byte');
 const exported = XingTuMd.exportTheme('byte');
 ```
 
-## 主题矩阵（10 主题）
+## 主题矩阵（12 主题）
 
 | ID | 名称 | 分组 | 主色 | H2 形态 | 适用场景 |
 |---|---|---|---|---|---|
@@ -106,6 +106,8 @@ const exported = XingTuMd.exportTheme('byte');
 | `code` | 代码极简 | 科技实战 | #24292e | 底部灰线 | 纯代码 / 硬核干货 |
 | `pure` | 纯文字随笔 | 科技实战 | #1a1a1a | 纯加粗 | 随笔 / 深度长文 / 口语化 |
 | `symbol` | 符号技术风 | 科技实战 | #ff6a00 | ▐ 符号前缀 | 技术博客 / 公式密集文 |
+| `infotech` | InfoQ 科技绿 | 科技实战 | #00A651 | 编号+分段进度条 | 科技资讯 / 深度技术文（v2.3 新增） |
+| `cyber` | 电光科技青 | 科技实战 | #00B8D9 | 编号+分段进度条 | AI 前沿 / 趋势解读（v2.3 新增） |
 | `business` | 商业评论 | 观点随笔 | #1A59B7 | 居中色块 | 观点 / 商业评论 |
 | `review` | 评测风 | 观点随笔 | #d71a1b | 主色下划线 | 效率 / 评测 |
 | `ink` | 墨韵留白 | 成长故事 | #2f3542 | 居中大字 | 成长复盘 / 人物故事 |
@@ -122,7 +124,7 @@ const exported = XingTuMd.exportTheme('byte');
 | 元素 | 语法 | 备注 |
 |---|---|---|
 | H1 | `# 标题` | 默认剥离（公众号标题单独填），可 `--keep-h1` |
-| H2/H3/H4 | `## / ### / ####` | 形态随主题（含 number 大数字前缀） |
+| H2/H3/H4 | `## / ### / ####` | 形态随主题（含 number 大数字前缀 / techprog 编号+分段进度条） |
 | 段落 + 软换行 | 行尾 `\` 或两空格 | |
 | 加粗 / 斜体 / 删除线 | `**` / `*` / `~~` | 颜色随主题 |
 | 行内 code / 代码块 | `` ` `` / ```` ``` ```` | 代码块 Mac 视窗风（深/浅可切） |
@@ -253,7 +255,7 @@ md2wechat/
 ├── bin/
 │   └── md2wechat.js          # CLI 入口（Node ≥14）
 ├── lib/
-│   └── engine.js              # 核心引擎：手写解析器 + 10 主题 + 插件 API + AI 友好输出
+│   └── engine.js              # 核心引擎：手写解析器 + 12 主题 + 插件 API + AI 友好输出
 ├── index.html                 # 工作台入口（根目录，双击即用）← 构建产物
 ├── app/
 │   └── template.html          # 可视化工作台模板（含 /*__ENGINE__*/ 占位）
@@ -303,7 +305,8 @@ md2wechat/
 - [x] v2.1：主题改名（商标合规）+ 插件化 API（registerTheme）+ AI 友好输出（renderToJSON）+ 向后兼容映射 + 8 主题
 - [x] v2.2：品牌层统一（产品名「墨排」）+ 图片占位卡优化（带序号）+ 发布检查清单 + 工作台 SVG icon + 2 新主题（editorial/terminal）+ 主题导入导出 + h2 number 形态 + 10 主题
 - [x] v2.2.1：整体色系联动（切换主题时工作台色系跟着变）+ 主题专属演示（5 主题对应风格演示）+ 工作台主题面板滚动支持
-- [ ] v2.3（规划中，2026-10）：工程化基础（目录结构重构 + 测试体系 + CI/CD）+ MCP 服务化 + AI 最佳实践文档 + Markdown 清洗工具
+- [x] v2.3：新增 2 科技主题（infotech InfoQ 科技绿 / cyber 电光科技青）+ h2 techprog 形态（章节编号 + 分段进度条 + 彩色标题，参考 InfoQ 版式）+ 12 主题 + infotech 专属演示
+- [ ] v2.4（规划中，2026-10）：工程化基础（目录结构重构 + 测试体系 + CI/CD）+ MCP 服务化 + AI 最佳实践文档 + Markdown 清洗工具
 - [ ] v3.0（计划中，2026-11~12）：主题市场（精选 20+）+ 模板引擎 + 桌面应用 + 微信 API 集成 + 多平台适配 + 团队协作
 - [ ] Future（长期）：SaaS 云服务 + AI 智能排版 + 企业级功能（批量排版 + 品牌主题定制 + 数据看板）
 

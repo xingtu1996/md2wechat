@@ -3,7 +3,7 @@
 <head data-page-node-id="ByeUjMvtA0KahlH9n6GrKK">
 <meta charset="UTF-8" data-page-node-id="amNgbmHalQAY6CmsyW7HV3">
 <meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="erjEMtJORE0x565913PhB1">
-<title>行途排版 · md2wechat v2.2</title>
+<title>行途排版 · md2wechat v2.3</title>
 <style>
 :root{
   --main:#056DE8;
@@ -341,7 +341,7 @@ svg{display:block;flex-shrink:0}
   <div class="brand" data-page-node-id="1A1hWhAEPw1DATIPcERwC0">
     <div class="logo" data-page-node-id="OPdLoeuH2J2UDqfMjQ7DPU">途</div>
     行途排版
-    <small data-page-node-id="OS21T6DHWvSDAIDoXSxcmK">md2wechat v2.2</small>
+    <small data-page-node-id="OS21T6DHWvSDAIDoXSxcmK">md2wechat v2.3</small>
   </div>
   <input class="title-in" id="titleIn" placeholder="文章标题（公众号标题单独填）" data-page-node-id="5zHjhKOWfiEISfBcXFjrjB">
   <div class="spacer" data-page-node-id="7o4Hnh6sPxitJ5OcWkp74p"></div>
@@ -583,6 +583,18 @@ svg{display:block;flex-shrink:0}
       text: '#2d2d2d', codeText: '#ff6b35',
       desc: '等宽简洁 + 琥珀色强调，终端极客感，适合技术硬核/CLI教程/代码密集文'
     },
+    'infotech': { // InfoQ 科技绿（v2.3 新增 · 编号+分段进度条标题）
+      name: 'InfoQ 科技绿', group: '科技实战', main: '#00A651',
+      h2: 'techprog', h3: 'line', quote: 'soft', pre: 'dark', dot: '#00A651',
+      text: '#2b2f36', codeText: '#00A651',
+      desc: '章节编号 + 分段进度条 + 绿色标题（InfoQ 参考），科技资讯/深度技术文'
+    },
+    'cyber': { // 电光科技青（v2.3 新增 · 赛博科技感）
+      name: '电光科技青', group: '科技实战', main: '#00B8D9',
+      h2: 'techprog', h3: 'line', quote: 'soft', pre: 'dark', dot: '#00B8D9',
+      text: '#2b2f36', codeText: '#00B8D9',
+      desc: '电光青主色 + 编号进度条，赛博科技感，适合 AI 前沿/趋势解读'
+    },
   };
 
   // 旧主题 ID → 新 ID 向后兼容映射（v2.1 改名，避免商标侵权）
@@ -614,6 +626,7 @@ svg{display:block;flex-shrink:0}
       plain: `font-size:18px;font-weight:bold;line-height:1.5;margin:40px 0 18px;color:${t.text};`,
       symbol: `font-size:18px;font-weight:bold;line-height:1.5;margin:42px 0 20px;color:${t.text};`,
       number: `font-size:17px;font-weight:600;line-height:1.6;margin:48px 0 20px;color:${t.text};display:flex;align-items:baseline;gap:14px;`,
+      techprog: `font-size:18px;font-weight:bold;line-height:1.5;margin:44px 0 24px;color:${t.text};`,
     };
     const h3s = {
       bar: `font-size:16px;font-weight:bold;line-height:1.5;margin:32px 0 16px;padding:2px 0 2px 10px;border-left:3px solid ${t.main};color:${t.text};`,
@@ -887,6 +900,9 @@ svg{display:block;flex-shrink:0}
     // 剥离 frontmatter（--- 起头的键值块）
     mainText = mainText.replace(/^\s*---[\s\S]*?---\s*\n?/, '');
 
+    // 统计 H2 总数（供 techprog 分段进度条按章节占比点亮）
+    opts._h2Total = (mainText.match(/^##\s+/gm) || []).length;
+
     const lines = mainText.replace(/\r\n/g, '\n').split('\n');
     const out = [];
     let i = 0;
@@ -908,6 +924,15 @@ svg{display:block;flex-shrink:0}
             const n = ++opts._h2Counter.index;
             const pad = n < 10 ? '0' + n : '' + n;
             out.push('<h2 style="' + S.h2 + '"><span style="font-family:Georgia,\'Times New Roman\',serif;font-size:36px;font-weight:400;color:' + t.main + ';line-height:1;letter-spacing:-1px;">' + pad + '</span><span>' + body + '</span></h2>');
+          }
+          else if (t.h2 === 'techprog') {
+            const n = ++opts._h2Counter.index;
+            const total = Math.max(opts._h2Total || n, n);
+            let segs = '';
+            for (let k = 1; k <= total; k++) {
+              segs += '<span style="flex:1;height:5px;border-radius:3px;background:' + (k <= n ? t.main : '#e8eaed') + ';display:block;"></span>';
+            }
+            out.push('<div style="margin:44px 0 24px;"><div style="display:flex;align-items:center;gap:12px;"><span style="font-size:34px;font-weight:900;line-height:1;color:' + t.main + ';">' + n + '</span><div style="flex:1;display:flex;gap:5px;">' + segs + '</div></div><div style="font-size:18px;font-weight:bold;line-height:1.6;margin-top:10px;color:' + t.main + ';">' + body + '</div></div>');
           }
           else out.push('<h2 style="' + S.h2 + '">' + body + '</h2>');
         } else if (lv === 3) out.push('<h3 style="' + S.h3 + '">' + body + '</h3>');
@@ -1479,7 +1504,7 @@ def ai_workflow(prompt: str) -> str:
 ---
 
 **行途技术手记** | 关注 AI 时代的工程师成长与效率提升。
-排版 | 墨排 · md2wechat 行途排版引擎（v2.2）\\
+排版 | 墨排 · md2wechat 行途排版引擎（v2.3）\\
 声明：未经授权，禁止抓取本文用于训练 AI 大模型。`,
 
   // editorial 编辑杂志风：深度长文/人物故事
@@ -1530,7 +1555,7 @@ def ai_workflow(prompt: str) -> str:
 ---
 
 **行途技术手记** | 一个技术人的真实记录，愿我们都能在技术的路上找到自己的节奏。
-排版 | md2wechat 行途排版引擎（v2.2）`,
+排版 | md2wechat 行途排版引擎（v2.3）`,
 
   // terminal 终端极客风：CLI 教程/技术硬核
   terminal: `# 命令行效率指南：从入门到上瘾
@@ -1592,7 +1617,7 @@ sed -i 's/old/new/g' *.md
 ---
 
 **行途技术手记** | 关注技术效率与工程实践。
-排版 | md2wechat 行途排版引擎（v2.2）`,
+排版 | md2wechat 行途排版引擎（v2.3）`,
 
   // pure 纯文字随笔：随笔感悟
   pure: `# 关于写作的一些碎碎念
@@ -1648,7 +1673,7 @@ sed -i 's/old/new/g' *.md
 ---
 
 **行途技术手记** | 一个技术人的随笔，想到什么写什么。
-排版 | md2wechat 行途排版引擎（v2.2）`,
+排版 | md2wechat 行途排版引擎（v2.3）`,
 
   // warm 暖调故事：故事情感
   warm: `# 深夜的便利店
@@ -1706,11 +1731,60 @@ sed -i 's/old/new/g' *.md
 ---
 
 **行途技术手记** | 记录那些平凡而温暖的瞬间。
-排版 | md2wechat 行途排版引擎（v2.2）`
+排版 | md2wechat 行途排版引擎（v2.3）`
+  ,
+  // infotech InfoQ 科技绿：编号+分段进度条标题演示（v2.3 新增）
+  infotech: `# AI 实验自动化：把 70% 的执行交给机器之后
+
+> 一份 InfoQ 科技风演示稿：每个章节标题自带编号 + 分段进度条，走过的章节会点亮。点击右上角可换肤对比。
+
+## 一、Auto Research 的工程落地
+
+StartLux 对 RSI 的研究不会只停留在 Auto Research，它已经是**落地的一种工程形态**：通过新的模型架构、训练算法和受控的本地参数更新机制，让模型参与训练下一代模型。
+
+> 这件事真正困难的地方，不是让模型"会改自己"，而是如何避免持续参数更新破坏已经具备的通用能力。
+
+## 二、70% 的实验执行交给 AI 之后
+
+在 StartLux-27B 这次研发中，大约 **70% 的实验执行**已经可以交给 AI，包括数据生成、实验调度、Eval 和初步失败分析。
+
+- **工作粒度变化**：从"亲自跑每一个实验"到"管理一套持续运转的实验系统"
+- **角色位移**：研究员从执行者变为系统管理者
+- **核心指标**：实验吞吐、失败分析覆盖率、人力投入比
+
+\`\`\`text
+实验执行占比（StartLux-27B）
+AI 执行 ████████████████████ 70%
+研究员手工 ████████ 30%
+\`\`\`
+
+### 三、可持续自我改进的系统
+
+团队正在推进的，是把数据、训练、模型结构和参数更新连接成**一套可以持续自我改进的系统**。
+
+| 环节 | 现状 | 目标 |
+| :--- | :--- | :--- |
+| 数据生成 | 人工标注为主 | AI 自动合成 + 校验 |
+| 实验调度 | 半自动 | 全自动排队 |
+| 失败分析 | 研究员逐项看 | AI 初步归因 |
+
+*图注：Auto Research 只是 RSI 的一块拼图。*
+
+## 四、对研究员的真实影响
+
+AI 把研究员从"亲自跑每一个实验"中解放出来，让他们可以更多地**管理一整台持续运转的实验机器**。
+
+> 技术细节终会过时，工程思想历久弥新。
+
+---
+
+**行途技术手记** | *一个终身学习者的真实记录，见证彼此成长的力量。*
+排版 | md2wechat 行途排版引擎（v2.3）
+*声明：未经授权，禁止任何机构或个人抓取本文内容，用于训练 AI 大模型等用途。*`
 };
 
 function loadDemo() {
-  const demo = DEMO_CONTENT[currentTheme] || DEMO_CONTENT.byte;
+  const demo = DEMO_CONTENT[currentTheme] || (currentTheme === 'cyber' ? DEMO_CONTENT.infotech : DEMO_CONTENT.byte);
   editor.value = demo;
   renderPreview();
 }
