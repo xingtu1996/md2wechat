@@ -1,0 +1,14 @@
+{
+  "id": "pure-minimal-article",
+  "name": "黑白极简随笔",
+  "group": "免费模板",
+  "main": "#1a1a1a",
+  "h2": "plain",
+  "h3": "plain",
+  "quote": "plain",
+  "pre": "light",
+  "dot": "#1a1a1a",
+  "text": "#333333",
+  "codeText": "#1a1a1a",
+  "desc": "零色块黑白极简：纯文字标题 + 灰边素引用 + 浅色代码块，大量留白，适合随笔/深度长文/个人思考"
+}

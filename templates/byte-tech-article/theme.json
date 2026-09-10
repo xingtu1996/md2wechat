@@ -1,0 +1,14 @@
+{
+  "id": "byte-tech-article",
+  "name": "行途蓝技术文",
+  "group": "免费模板",
+  "main": "#056DE8",
+  "h2": "bar",
+  "h3": "line",
+  "quote": "soft",
+  "pre": "dark",
+  "dot": "#056DE8",
+  "text": "#3f3f3f",
+  "codeText": "#056DE8",
+  "desc": "技术文章专用：行途蓝主色 + 左侧色条标题 + 深色代码块，适合工程实践/AI 工具链/深度教程"
+}

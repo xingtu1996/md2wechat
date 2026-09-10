@@ -327,3 +327,30 @@ md2wechat/
 本项目部分代码由 AI 辅助生成（含解析器、CLI、工作台模板）。所有架构决策、需求定义、风格取舍、测试用例均由行途主导，AI 仅作为「加速器」使用。项目遵循 MIT 协议，欢迎使用、改造、再分发。
 
 > 微信编辑器粘贴最佳实践：① 工作台生成 HTML → 复制 ② 公众号后台新建图文 → 粘贴 ③ 文末图片占位处插入真实图片 ④ 文末 footer 区如有原文链接，微信会自动转为「阅读原文」按钮。
+
+---
+
+## AI 友好
+
+md2wechat 从设计之初就把「AI 能直接调用」当作一等公民。核心引擎是零依赖、确定性的纯函数：AI 负责写内容，md2wechat 负责排版，产出永远可复现。
+
+三种调用方式，按场景选：
+
+- **CLI**（AI Agent / Shell 脚本）：`node bin/md2wechat.js input.md -o output.html --theme byte`，`--stdout` 可接管道。
+- **Node 模块**（编程助手 / 流水线）：`require('md2wechat/lib/engine.js')`，`render()` / `renderToJSON()` 直接拿结构化 HTML 与字数、主题元信息。
+- **Skill**（Agent 平台）：自带 `skills/md2wechat-typograph/SKILL.md`，告诉 Agent 何时触发、怎么执行、如何交付。
+
+完整教程（含可直接复制运行的脚本与 MCP 接口规划）见 [docs/ai-integration-guide.md](docs/ai-integration-guide.md)。
+
+## 定制化与模板包
+
+md2wechat 采用 **open-core** 模式：核心引擎与 12 个内置主题永久 MIT 开源免费；付费点在增值层。
+
+- **定制化主题**：`registerTheme` 纯 JSON 配置即可注入品牌主题，工作台支持一键导入导出 `.json`。
+- **模板包**：对标 shadcn/ui 的「免费组件 + 付费 Blocks」——行业/场景模板包（技术文、小册、企业品牌）在免费引擎之上提供开箱即用的结构与视觉。
+- **免费模板**：`templates/` 内置两套引流模板（行途蓝技术文、黑白极简随笔）。
+
+详见：
+
+- 定制化指南（主题注册 / 导入导出 / footer / 服务定价）：[docs/customization-guide.md](docs/customization-guide.md)
+- 模板包规划与免费模板：[templates/README.md](templates/README.md)
