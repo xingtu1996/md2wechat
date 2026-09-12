@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>行途排版 · md2wechat v2.2</title>
+<title>行途排版 · md2wechat v2.2.2</title>
 <style>
 :root{
   --main:#056DE8;
@@ -341,7 +341,7 @@ svg{display:block;flex-shrink:0}
   <div class="brand">
     <div class="logo">途</div>
     行途排版
-    <small>md2wechat v2.2</small>
+    <small>md2wechat v2.2.2</small>
   </div>
   <input class="title-in" id="titleIn" placeholder="文章标题（公众号标题单独填）">
   <div class="spacer"></div>
@@ -784,67 +784,54 @@ svg{display:block;flex-shrink:0}
     const marker = m[2];
     const ordered = /^\d/.test(marker);
     const startNum = ordered ? parseInt(marker, 10) : 1;
-    return { indent: m[1].length, ordered: ordered, startNum: startNum, text: m[3] };
+    return { indent: m[1].length, ordered: ordered, startNum: startNum, text: m[3], raw: marker };
   }
 
-  // 递归解析：同缩进 → 兄弟；更深缩进 → 子列表
+  // 递归解析列表（v2.2.2：扁平化输出 <p> 伪列表）
+  // 缘由：公众号编辑器粘贴 <ul><li> 时，会把行首 <strong> 之后的内容强制断行（句号孤行）；
+  // p 段落 + bullet/数字前缀 + margin 缩进粘贴零损耗，是各排版工具的通行做法。
+  // 返回 { html, next, count }
   function parseList(lines, i, S, t, opts) {
-    const first = matchListLine(lines[i]);
-    const baseIndent = first.indent;
-    const ordered = first.ordered;
-    let startNum = first.startNum;
-    let items = [];
-    let cur = null;
-    let j = i;
-
-    while (j < lines.length) {
-      const line = lines[j];
-      if (/^\s*$/.test(line)) { j++; continue; }
-      const m = matchListLine(line);
-      if (!m || m.indent < baseIndent) break;
-      if (m.indent === baseIndent) {
-        if (m.ordered !== ordered) break; // 类型切换 → 结束当前列表
-        cur = { text: m.text, task: null, child: '' };
-        // 任务项 - [ ] / - [x]
-        const tm = m.text.match(/^\[([ xX])\]\s+(.*)$/);
-        if (tm) { cur.task = tm[1].toLowerCase() === 'x'; cur.text = tm[2]; }
-        items.push(cur);
-        j++;
-      } else {
-        // 更深缩进：若仍是列表行 → 子列表；否则视为上一项续行（缩进文本）
-        if (!cur) { j++; continue; }
-        const r = parseList(lines, j, S, t, opts);
-        if (r && r.count > 0) {
-          cur.child = r.html;
-          j = r.next;
-        } else {
-          // 缩进文本并入上一项
-          cur.text = cur.text + (cur.text ? ' ' : '') + line.trim();
+    const items = []; // { depth, marker, text }
+    function walk(start, depth) {
+      const first = matchListLine(lines[start]);
+      const baseIndent = first.indent;
+      const ordered = first.ordered;
+      let num = first.startNum;
+      let j = start;
+      while (j < lines.length) {
+        const line = lines[j];
+        if (/^\s*$/.test(line)) { j++; continue; }
+        const m = matchListLine(line);
+        if (!m || m.indent < baseIndent) break;
+        if (m.indent === baseIndent && m.ordered !== ordered) break;
+        if (m.indent > baseIndent) {
+          // 更深缩进：子列表 → 递归（扁平展开）；非列表续行 → 并入上一项
+          if (matchListLine(line)) { j = walk(j, depth + 1); continue; }
+          if (items.length) items[items.length - 1].text += ' ' + line.trim();
           j++;
+          continue;
         }
+        let text = m.text, task = null;
+        const tm = text.match(/^\[([ xX])\]\s+(.*)$/);
+        if (tm) { task = tm[1].toLowerCase() === 'x'; text = tm[2]; }
+        // v2.2.2：有序项尊重作者写的数字（写几显示几），无序用 •
+        const marker = task !== null ? (task ? '✅ ' : '⬜ ')
+                     : (ordered ? String(parseInt(m.raw, 10) || num) + '. ' : '• ');
+        num++;
+        items.push({ depth: depth, marker: marker, text: text });
+        j++;
       }
+      return j;
     }
-
-    if (items.length === 0) return { html: '', next: j, count: 0 };
-    const hasTask = items.some(function (x) { return x.task !== null; });
-    const tag = ordered ? 'ol' : 'ul';
-    const contStyle = ordered
-      ? S.ol.replace(/color:[^;]+;/, '')
-      : S.ul.replace(/color:[^;]+;/g, '');
-    const listStyle = hasTask ? 'list-style:none;padding-left:16px;' : '';
-    let html = '<' + tag + ' style="' + (hasTask ? S.ul.replace('padding-left:24px;', 'padding-left:14px;') : (ordered ? S.ol : S.ul)) + '"' + (ordered && startNum !== 1 ? ' start="' + startNum + '"' : '') + '>';
-    items.forEach(function (it) {
-      let liStyle = hasTask ? 'list-style:none;' + S.li : S.li;
-      let prefix = '';
-      if (it.task !== null) {
-        const sym = it.task ? '✅' : '⬜';
-        prefix = '<span>' + sym + '</span> ';
-      }
-      const textHtml = inline(it.text, S, t, opts);
-      html += '<li style="' + liStyle + '">' + prefix + textHtml + it.child + '</li>';
-    });
-    html += '</' + tag + '>';
-    return { html: html, next: j, count: items.length };
+    const next = walk(i, 0);
+    if (items.length === 0) return { html: '', next: next, count: 0 };
+    const html = items.map(function (it) {
+      const indent = 2 + it.depth * 24;
+      return '<p style="margin:0 ' + indent + 'px 8px ' + indent + 'px;color:' + t.text + ';">'
+        + it.marker + inline(it.text, S, t, opts) + '</p>';
+    }).join('');
+    return { html: html, next: next, count: items.length };
   }
 
   /* ==================== 媒体占位 / 段落 ==================== */
@@ -1160,7 +1147,7 @@ svg{display:block;flex-shrink:0}
       wordCount: countWords(r.html),
       html: r.html,
       meta: {
-        engineVersion: '2.2.1',
+        engineVersion: '2.2.2',
         generatedAt: new Date().toISOString(),
         inputLength: md.length,
         outputLength: r.html.length
@@ -1183,7 +1170,7 @@ svg{display:block;flex-shrink:0}
   }
 
   return {
-    version: '2.2.1',
+    version: '2.2.2',
     render: render,
     renderToJSON: renderToJSON,
     themes: THEMES,

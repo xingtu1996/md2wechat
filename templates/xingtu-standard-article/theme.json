@@ -1,0 +1,16 @@
+{
+  "id": "xingtu-standard-article",
+  "name": "行途标准格式（技术闪记）",
+  "group": "行途自有",
+  "main": "#1a1a1a",
+  "h2": "plain",
+  "h3": "plain",
+  "quote": "plain",
+  "pre": "light",
+  "dot": "#1a1a1a",
+  "text": "#333333",
+  "codeText": "#1a1a1a",
+  "desc": "行途公众号标准格式骨架：行头（一句话总结 + 先说结论 + 目录）、章内（本章摘要 / 个人观点 / 数据来源）、行尾（本文核心结论 / 下一篇预告 / 延伸阅读 / 关于行途）+ 引擎自动署名页脚。黑白极简，适合技术闪记与深度长文",
+  "template": "template.md",
+  "recommendTheme": "pure"
+}

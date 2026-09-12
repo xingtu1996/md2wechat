@@ -9,15 +9,20 @@
  *
  * 选项：
  *   -o, --output <file>   输出路径（默认同目录 <名>.公众号版.html）
- *   --theme <id>          主题：byte|github|focus36|sspai|ink|terracotta（默认 byte）
+ *   --theme <id>          主题：byte|code|business|review|ink|warm|pure|symbol|editorial|terminal|infotech|cyber（默认 byte，--list-themes 看全量）
  *   --list-themes         列出所有可用主题
  *   --color <hex>         自定义主色，覆盖当前主题（如 --color #FF6B35）
  *   --title <text>        预览标题（默认取 md 首个 # 标题）
  *   --no-footer           禁用文末 --- 后 footer 小字分离
+ *   --[no-]signature      文末署名页脚（品牌行 + 排版引擎行 + 版权行，默认开）
  *   --links <mode>        keep|text|drop（默认 text：微信禁外链，url 转角标）
  *   --images <mode>       placeholder|drop|keep（默认 placeholder：图位置占位卡）
  *   --stdout              只打印正文 section HTML，不生成预览壳
  *   -q, --quiet           安静模式
+ *
+ * 行途格式件（v2.4）：块级语义前缀自动成块——
+ *   本章摘要：…（浅底摘要块）｜个人观点：/我的判断：/一句话总结：/小答案：（强调观点块）
+ *   数据来源：/数据口径：/备注：/注：（小字注释行）
  *
  * 作者：行途（xingtu1996）· 部分代码由 AI 辅助生成 · MIT
  */
@@ -28,7 +33,8 @@ const engine = require('../lib/engine.js');
 
 function parseArgs(argv) {
   const a = { input: null, output: null, theme: 'byte', color: null, title: null,
-              footer: true, links: 'text', images: 'placeholder', stdout: false, quiet: false };
+              footer: true, links: 'text', images: 'placeholder', stdout: false, quiet: false,
+              signature: true };
   const rest = [];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -41,6 +47,8 @@ function parseArgs(argv) {
       case '--links': a.links = next(); break;
       case '--images': a.images = next(); break;
       case '--no-footer': a.footer = false; break;
+      case '--signature': a.signature = true; break;
+      case '--no-signature': a.signature = false; break;
       case '--stdout': a.stdout = true; break;
       case '-q': case '--quiet': a.quiet = true; break;
       case '--list-themes': a.listThemes = true; break;
@@ -116,8 +124,8 @@ function main() {
     console.log('md2wechat v' + engine.version + ' · 行途排版引擎 CLI\n');
     console.log('用法: node md2wechat.js <input.md> [-o out.html] [选项]');
     console.log('选项见文件头注释。示例:');
-    console.log('  node md2wechat.js demo.md --theme focus36');
-    console.log('  node md2wechat.js demo.md --stdout > body.html');
+    console.log('  node md2wechat.js demo.md --theme pure');
+    console.log('  node md2wechat.js demo.md --no-signature --stdout > body.html');
     return;
   }
   if (a.listThemes) { console.log(listThemes()); return; }
@@ -133,6 +141,7 @@ function main() {
     footer: a.footer,
     links: a.links,
     images: a.images,
+    signature: a.signature,
   });
   const words = engine.countWords(res.html);
   const t = engine.themeTokens(a.theme);
