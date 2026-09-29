@@ -17,7 +17,7 @@
 ```bash
 cp templates/pure-minimal-article/template.md my-essay.md
 # 编辑 my-essay.md，替换占位内容
-node bin/md2wechat.js my-essay.md --theme pure -o my-essay.html
+node bin/mopai.js my-essay.md --theme pure -o my-essay.html
 ```
 
 ### 方式二：导入 theme.json 到工作台

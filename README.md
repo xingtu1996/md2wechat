@@ -1,4 +1,4 @@
-# 墨排 · md2wechat 行途排版引擎
+# 墨排 · mopai 行途排版引擎
 
 > **Markdown → 微信公众号排版** · 零依赖、全内联样式、12 主题、CLI + 单文件离线工作台、AI 友好
 >
@@ -40,34 +40,34 @@
 
 ```bash
 # 转换文章（默认输出同目录 .公众号版.html）
-node bin/md2wechat.js examples/demo.md
+mopai examples/demo.md
 
 # 指定主题（12 主题可选）
-node bin/md2wechat.js examples/demo.md --theme editorial
+mopai examples/demo.md --theme editorial
 
 # 自定义主色（覆盖当前主题）
-node bin/md2wechat.js examples/demo.md --color #FF6B35
+mopai examples/demo.md --color #FF6B35
 
 # 仅输出正文 HTML（管道友好，便于 AI/自动化接入）
-node bin/md2wechat.js examples/demo.md --stdout > body.html
+mopai examples/demo.md --stdout > body.html
 
 # 列出所有主题（按分组返回）
-node bin/md2wechat.js --list-themes
+mopai --list-themes
 
 # 图片模式：placeholder（占位卡，默认）/ keep（外链自动上传）/ drop（忽略）
-node bin/md2wechat.js examples/demo.md --images keep
+mopai examples/demo.md --images keep
 
 # 发布就绪（v2.4）
-node bin/md2wechat.js examples/demo.md --summary          # 自动摘要（≤120 字）
-node bin/md2wechat.js examples/demo.md --check            # 发布检查清单（6 项）
-node bin/md2wechat.js examples/demo.md --variant zhihu    # 输出 ./examples/demo.知乎版.md
-node bin/md2wechat.js examples/demo.md --variant juejin   # 输出 ./examples/demo.掘金版.md
+mopai examples/demo.md --summary          # 自动摘要（≤120 字）
+mopai examples/demo.md --check            # 发布检查清单（6 项）
+mopai examples/demo.md --variant zhihu    # 输出 ./examples/demo.知乎版.md
+mopai examples/demo.md --variant juejin   # 输出 ./examples/demo.掘金版.md
 ```
 
 ### 方式 3：Node 模块（AI / 自动化集成）
 
 ```js
-const XingTuMd = require('md2wechat/lib/engine.js');
+const XingTuMd = require('mopai/lib/engine.js');
 
 // 基础渲染
 const res = XingTuMd.render('# 标题\n\n正文', { theme: 'byte' });
@@ -156,7 +156,7 @@ const exported = XingTuMd.exportTheme('byte');
 | `个人观点：…` / `我的判断：…` / `一句话总结：…` / `小答案：…` | 强调观点块（左侧主题色粗线 + 5% 主题色底） |
 | `数据来源：…` / `数据口径：…` / `数据说明：…` / `备注：…` / `注：…` | 小字灰色注释行 |
 
-**署名页脚**：默认自动在文末追加三行（`行途XingTu · …` / `排版引擎：墨排 · md2wechat（行途自研，v2.4.0）` / `© 2026 行途 · …`）；`--no-signature` 关闭；若文末 footer 已手写「排版引擎」字样则自动跳过防重复。
+**署名页脚**：默认自动在文末追加三行（`行途XingTu · …` / `排版引擎：墨排 · mopai（行途自研，v2.4.0）` / `© 2026 行途 · …`）；`--no-signature` 关闭；若文末 footer 已手写「排版引擎」字样则自动跳过防重复。
 
 **标准文章骨架**：`templates/xingtu-standard-article/template.md`——行头（一句话总结 → 先说结论 → 目录）、章内（本章摘要 / 个人观点 / 数据来源 / 配图占位）、行尾（本文核心结论 → 下一篇预告 → 延伸阅读 → 关于行途）的完整格式契约与使用纪律，见该目录 README。
 
@@ -181,7 +181,7 @@ const exported = XingTuMd.exportTheme('byte');
 ### 首图/封面提示 + 发布检查清单 `--check`
 
 ```
-$ node bin/md2wechat.js examples/demo.md --check
+$ mopai examples/demo.md --check
 发布检查清单（3/6 项达标）
   ✅ 文章标题：已从 H1 提取，发布前再核对长度（建议 15-30 字）
        → AI 时代的工程师工具箱
@@ -190,7 +190,7 @@ $ node bin/md2wechat.js examples/demo.md --check
   ⚠️ 图片数量：需在公众号后台手动上传 1 张图片
        → 1 张占位
   ✅ 摘要：规则法自动提取（≤120 字），可直接粘到公众号后台
-       → 一份轻量的排版演示稿，展示 md2wechat 支持的所有排版元素。…
+       → 一份轻量的排版演示稿，展示 mopai 支持的所有排版元素。…
   ✅ 封面：正文含 1 张图 → 可截取首图作封面（900×383）；…
   ℹ️ 原创声明：首发文章建议在公众号后台开启原创声明
 ```
@@ -200,7 +200,7 @@ $ node bin/md2wechat.js examples/demo.md --check
 ### Node API
 
 ```js
-const XingTuMd = require('md2wechat/lib/engine.js');
+const XingTuMd = require('mopai/lib/engine.js');
 XingTuMd.extractSummary(md, 120);   // ≤120 字摘要
 XingTuMd.coverAdvice(md);           // { hasImage, count, hasHero, need, cover, advice }
 XingTuMd.publishCheck(md, opts);    // 6 项清单 + 达标计数
@@ -262,8 +262,8 @@ XingTuMd.variantKeys;               // ['zhihu', 'juejin']
 ### Playwright 自动化接入示例
 
 ```js
-// 1. 用 md2wechat 生成正文 HTML
-const XingTuMd = require('md2wechat/lib/engine.js');
+// 1. 用 mopai 生成正文 HTML
+const XingTuMd = require('mopai/lib/engine.js');
 const { html } = XingTuMd.render(markdownContent, { theme: 'byte' });
 
 // 2. Playwright 打开公众号编辑器，注入正文
@@ -319,9 +319,9 @@ await page.evaluate((b64) => {
 ## 项目结构
 
 ```
-md2wechat/
+mopai/
 ├── bin/
-│   └── md2wechat.js          # CLI 入口（Node ≥14）
+│   └── mopai.js          # CLI 入口（Node ≥14）
 ├── lib/
 │   └── engine.js              # 核心引擎：手写解析器 + 12 主题 + 插件 API + AI 友好输出
 ├── index.html                 # 工作台入口（根目录，双击即用）← 构建产物
@@ -365,7 +365,7 @@ md2wechat/
 
 ```bash
 npm test                       # 26 项测试（node:test，零依赖，Node ≥18）
-node bin/md2wechat.js examples/demo.md --check    # 手动验证发布就绪项
+mopai examples/demo.md --check    # 手动验证发布就绪项
 node tools/build-app.js        # 重新构建单文件工作台 index.html
 ```
 
@@ -401,7 +401,7 @@ node tools/build-app.js        # 重新构建单文件工作台 index.html
 - [ ] v3.0（计划中，2026-11~12）：主题市场（精选 20+）+ 模板引擎 + 桌面应用 + 微信 API 集成 + 多平台适配 + 团队协作
 - [ ] Future（长期）：SaaS 云服务 + AI 智能排版 + 企业级功能（批量排版 + 品牌主题定制 + 数据看板）
 
-> 详细规划见项目 specs 文档：`specs/20260905-md2wechat-行途排版引擎-后续跟进/`
+> 详细规划见项目 specs 文档：`specs/20260905-mopai-行途排版引擎-后续跟进/`
 
 ## 关于作者
 
@@ -423,19 +423,19 @@ node tools/build-app.js        # 重新构建单文件工作台 index.html
 
 ## AI 友好
 
-md2wechat 从设计之初就把「AI 能直接调用」当作一等公民。核心引擎是零依赖、确定性的纯函数：AI 负责写内容，md2wechat 负责排版，产出永远可复现。
+mopai 从设计之初就把「AI 能直接调用」当作一等公民。核心引擎是零依赖、确定性的纯函数：AI 负责写内容，mopai 负责排版，产出永远可复现。
 
 三种调用方式，按场景选：
 
-- **CLI**（AI Agent / Shell 脚本）：`node bin/md2wechat.js input.md -o output.html --theme byte`，`--stdout` 可接管道。
-- **Node 模块**（编程助手 / 流水线）：`require('md2wechat/lib/engine.js')`，`render()` / `renderToJSON()` 直接拿结构化 HTML 与字数、主题元信息。
+- **CLI**（AI Agent / Shell 脚本）：`mopai input.md -o output.html --theme byte`，`--stdout` 可接管道。
+- **Node 模块**（编程助手 / 流水线）：`require('mopai/lib/engine.js')`，`render()` / `renderToJSON()` 直接拿结构化 HTML 与字数、主题元信息。
 - **Skill**（Agent 平台）：自带 `skills/md2wechat-typograph/SKILL.md`，告诉 Agent 何时触发、怎么执行、如何交付。
 
 完整教程（含可直接复制运行的脚本与 MCP 接口规划）见 [docs/ai-integration-guide.md](docs/ai-integration-guide.md)。
 
 ## 定制化与模板包
 
-md2wechat 采用 **open-core** 模式：核心引擎与 12 个内置主题永久 MIT 开源免费；付费点在增值层。
+mopai 采用 **open-core** 模式：核心引擎与 12 个内置主题永久 MIT 开源免费；付费点在增值层。
 
 - **定制化主题**：`registerTheme` 纯 JSON 配置即可注入品牌主题，工作台支持一键导入导出 `.json`。
 - **模板包**：对标 shadcn/ui 的「免费组件 + 付费 Blocks」——行业/场景模板包（技术文、小册、企业品牌）在免费引擎之上提供开箱即用的结构与视觉。

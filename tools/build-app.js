@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * md2wechat · 工作台构建脚本
+ * mopai · 工作台构建脚本
  * 把 lib/engine.js 内联进 app/template.html → 产出根目录 index.html（单文件、零 CDN、双击即用）
  *
  * 用法: node tools/build-app.js

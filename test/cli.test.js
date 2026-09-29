@@ -1,6 +1,6 @@
 /**
- * md2wechat · CLI 端到端测试（node:test + child_process，零依赖）
- * 真实跑 bin/md2wechat.js，验证开关与退出码
+ * mopai · CLI 端到端测试（node:test + child_process，零依赖）
+ * 真实跑 bin/mopai.js，验证开关与退出码
  */
 'use strict';
 const test = require('node:test');
@@ -11,10 +11,10 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
 const ROOT = path.join(__dirname, '..');
-const BIN = path.join(ROOT, 'bin', 'md2wechat.js');
+const BIN = path.join(ROOT, 'bin', 'mopai.js');
 const DEMO = path.join(ROOT, 'examples', 'demo.md');
 
-const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'md2wechat-test-'));
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mopai-test-'));
 const WORK = path.join(tmpDir, 'sample.md');
 fs.writeFileSync(WORK, [
   '# 零依赖排版引擎',
@@ -130,7 +130,7 @@ test('CLI：默认转换 examples/demo.md 生成 .公众号版.html', () => {
 
 test('CLI：--help 输出用法且退出码 0', () => {
   const out = run(['--help']);
-  assert.ok(out.includes('md2wechat v' + require(path.join(ROOT, 'lib', 'engine.js')).version), '应输出引擎版本');
+  assert.ok(out.includes('mopai v' + require(path.join(ROOT, 'lib', 'engine.js')).version), '应输出引擎版本');
   assert.ok(out.includes('用法'), '应输出用法');
 });
 

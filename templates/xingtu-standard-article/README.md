@@ -1,7 +1,7 @@
 # 行途标准文章格式（xingtu-standard-article）
 
 > 这份模板是「行途」公众号文章**行头 / 行尾 / 章内格式件**的唯一事实源（SSoT）。
-> 写新稿时复制 `template.md`，按骨架填内容即可；排版交给 md2wechat CLI。
+> 写新稿时复制 `template.md`，按骨架填内容即可；排版交给 mopai CLI。
 
 ## 为什么需要它
 
@@ -33,9 +33,9 @@
 ## 使用方式
 
 ```bash
-node bin/md2wechat.js 你的稿子.md -o 输出.html --theme pure
+node bin/mopai.js 你的稿子.md -o 输出.html --theme pure
 # 需要关掉署名页脚时：
-node bin/md2wechat.js 你的稿子.md --no-signature
+node bin/mopai.js 你的稿子.md --no-signature
 ```
 
 浏览器工作台（`index.html`）同一份引擎，粘贴到左侧即可看到同样的效果。

@@ -41,7 +41,7 @@ jobs:
       - name: 上传 index.html（单文件交付物）
         uses: actions/upload-artifact@v4
         with:
-          name: md2wechat-index-html
+          name: mopai-index-html
           path: index.html
           if-no-files-found: error
 

@@ -1,12 +1,12 @@
 # 模板包：核心引擎免费，行业模板付费
 
-> 对标 shadcn/ui 的"免费组件 + 付费 Blocks"模式：**md2wechat 引擎和 12 个内置主题永远 MIT 免费**，付费点是**经过验证的行业/场景模板包**。
+> 对标 shadcn/ui 的"免费组件 + 付费 Blocks"模式：**mopai 引擎和 12 个内置主题永远 MIT 免费**，付费点是**经过验证的行业/场景模板包**。
 
 ---
 
 ## 一、定位
 
-md2wechat 解决的是"把 Markdown 排好看"。但很多人的真正痛点不是"不会选主题"，而是**不知道一篇公众号文章该怎么组织结构**——技术文怎么开头、观点文怎么收、小册章节怎么排。
+mopai 解决的是"把 Markdown 排好看"。但很多人的真正痛点不是"不会选主题"，而是**不知道一篇公众号文章该怎么组织结构**——技术文怎么开头、观点文怎么收、小册章节怎么排。
 
 模板包把"选题结构 + 主题配色 + 文末 CTA"打包成开箱即用的文件，让用户**换内容就能发**。这是核心引擎免费之上的增值层。
 
@@ -90,7 +90,7 @@ cp templates/byte-tech-article/template.md my-post.md
 
 # 2. 把 theme.json 注册进 Node 流水线，或在工作台导入
 # 3. 渲染（byte 本身是内置主题，直接 --theme byte 即可）
-node bin/md2wechat.js my-post.md --theme byte -o my-post.html
+node bin/mopai.js my-post.md --theme byte -o my-post.html
 ```
 
 > 付费模板包尚未随 v2.3 发布，上述为路线图。免费模板先跑通"主题 JSON + 结构 MD"的交付格式，付费包沿用同一格式。

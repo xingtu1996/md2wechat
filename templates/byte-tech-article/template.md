@@ -20,7 +20,7 @@
 
 ```bash
 # 示例：一行命令跑通最小闭环
-node bin/md2wechat.js input.md --theme byte -o output.html
+node bin/mopai.js input.md --theme byte -o output.html
 ```
 
 ### 第二步：关键设计

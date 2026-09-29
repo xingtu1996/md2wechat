@@ -17,7 +17,7 @@
 ```bash
 cp templates/byte-tech-article/template.md my-post.md
 # 编辑 my-post.md，替换占位内容
-node bin/md2wechat.js my-post.md --theme byte -o my-post.html
+node bin/mopai.js my-post.md --theme byte -o my-post.html
 ```
 
 ### 方式二：导入 theme.json 到工作台

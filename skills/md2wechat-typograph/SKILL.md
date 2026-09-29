@@ -30,7 +30,7 @@ dsh_compatible: true
 3. **执行**：
    ```bash
    # 写入临时 md 文件
-   path/to/md2wechat/bin/md2wechat.js /tmp/article.md -o /tmp/article.公众号版.html \
+   path/to/md2wechat/bin/mopai.js /tmp/article.md -o /tmp/article.公众号版.html \
        --theme byte \
        --footer
    ```
@@ -44,7 +44,7 @@ dsh_compatible: true
 
 | 命令 | 说明 |
 | --- | --- |
-| `md2wechat <md> [-o html]` | 生成手机预览壳（默认主题 byte） |
+| `mopai <md> [-o html]` | 生成手机预览壳（默认主题 byte） |
 | `--theme <id>` | 切换主题（byte/github/focus36/sspai/ink/terracotta） |
 | `--color <hex>` | 覆盖主色（如 `--color #FF6B35`） |
 | `--stdout` | 只输出正文 HTML（管道） |
@@ -75,10 +75,10 @@ dsh_compatible: true
 
 ## 失败模式
 
-- 用户没安装 md2wechat → 指引用户安装或给单文件工作台（根目录 `index.html` 双击）
-- 用户要求「AI 智能排版」→ 拒绝（确定性是 md2wechat 的卖点）；引导手动选主题
+- 用户没安装 mopai → 指引用户安装或给单文件工作台（根目录 `index.html` 双击）
+- 用户要求「AI 智能排版」→ 拒绝（确定性是 mopai 的卖点）；引导手动选主题
 - 公众号粘贴样式丢失 → 99% 是用户没复制 #content 区域；指引重新操作
-- 图片粘贴不出来 → md2wechat 默认输出占位卡（公众号图片需后台手动上传），不是 bug
+- 图片粘贴不出来 → mopai 默认输出占位卡（公众号图片需后台手动上传），不是 bug
 
 ## 例子
 
@@ -89,7 +89,7 @@ dsh_compatible: true
 ```bash
 # 1. 写出临时 md（来自用户附件/粘贴）
 # 2. 执行
-node /path/to/md2wechat/bin/md2wechat.js /tmp/post.md -o /tmp/post.公众号版.html \
+node /path/to/md2wechat/bin/mopai.js /tmp/post.md -o /tmp/post.公众号版.html \
     --theme byte
 ```
 
@@ -101,7 +101,7 @@ node /path/to/md2wechat/bin/md2wechat.js /tmp/post.md -o /tmp/post.公众号版.
 ## 关联资产
 
 - **仓库**：[xingtu1996/md2wechat](https://github.com/xingtu1996/md2wechat)
-- **CLI 文档**：`md2wechat --help`
+- **CLI 文档**：`mopai --help`
 - **引擎**：`lib/engine.js`（Node CommonJS，浏览器 UMD 同源）
 - **单文件工作台**：根目录 `index.html`（38KB 零依赖双击即用）
 

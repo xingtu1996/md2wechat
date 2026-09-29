@@ -1,5 +1,5 @@
 /**
- * md2wechat · 工作台内嵌引擎漂移守卫（node:test，零依赖）
+ * mopai · 工作台内嵌引擎漂移守卫（node:test，零依赖）
  * index.html 是单文件交付物，内嵌一份引擎副本。
  * 本测试把它抽出来实跑，确保与 lib/engine.js 行为完全一致，防止再次出现「工作台与 CLI 渲染不一致」。
  */
@@ -28,7 +28,7 @@ function extractEmbeddedEngine() {
 }
 
 function loadEmbedded() {
-  const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'md2wechat-wb-')), 'embedded.js');
+  const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'mopai-wb-')), 'embedded.js');
   fs.writeFileSync(tmp, extractEmbeddedEngine(), 'utf-8');
   return require(tmp);
 }

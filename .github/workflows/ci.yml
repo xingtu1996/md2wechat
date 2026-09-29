@@ -50,12 +50,12 @@ jobs:
 
       - name: CLI smoke（examples/demo.md → 公众号 HTML）
         run: |
-          node bin/md2wechat.js examples/demo.md --theme editorial -o /tmp/demo.html
-          node bin/md2wechat.js examples/demo.md --stdout | head -c 200
+          node bin/mopai.js examples/demo.md --theme editorial -o /tmp/demo.html
+          node bin/mopai.js examples/demo.md --stdout | head -c 200
           echo ""
-          node bin/md2wechat.js examples/demo.md --check
-          node bin/md2wechat.js examples/demo.md --summary
-          node bin/md2wechat.js examples/demo.md --variant zhihu --stdout | head -c 200
+          node bin/mopai.js examples/demo.md --check
+          node bin/mopai.js examples/demo.md --summary
+          node bin/mopai.js examples/demo.md --variant zhihu --stdout | head -c 200
           echo ""
           test -s /tmp/demo.html && echo "✅ CLI smoke 通过"
 

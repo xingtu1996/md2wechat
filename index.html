@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>行途排版 · md2wechat v2.4.0</title>
+<title>行途排版 · mopai v2.4.0</title>
 <style>
 :root{
   --main:#056DE8;
@@ -341,7 +341,7 @@ svg{display:block;flex-shrink:0}
   <div class="brand">
     <div class="logo">途</div>
     行途排版
-    <small>md2wechat v2.4.0</small>
+    <small>mopai v2.4.0</small>
   </div>
   <input class="title-in" id="titleIn" placeholder="文章标题（公众号标题单独填）">
   <div class="spacer"></div>
@@ -464,7 +464,7 @@ svg{display:block;flex-shrink:0}
 
 <script>
 /**
- * md2wechat engine v2.4
+ * mopai engine v2.4
  * 行途排版引擎核心：Markdown → 微信公众号内联样式 HTML
  * ------------------------------------------------------------------
  * 设计哲学：
@@ -1140,7 +1140,7 @@ svg{display:block;flex-shrink:0}
       const yr = new Date().getFullYear();
       section += '\n<div style="' + S.signature + '">'
         + '行途XingTu · AI 时代的工程师成长与效率提升<br>'
-        + '排版引擎：墨排 · md2wechat（行途自研，v' + ENGINE_VERSION + '）<br>'
+        + '排版引擎：墨排 · mopai（行途自研，v' + ENGINE_VERSION + '）<br>'
         + '© ' + yr + ' 行途 · 欢迎转载，注明出处 · 禁止未经授权用于 AI 训练'
         + '</div>';
     }
@@ -1702,7 +1702,7 @@ function exportTheme() {
   const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'md2wechat-theme-' + currentTheme + '.json';
+  a.href = url; a.download = 'mopai-theme-' + currentTheme + '.json';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   toast('主题已导出：' + currentTheme);
@@ -1747,7 +1747,7 @@ const DEMO_CONTENT = {
   // byte 行途蓝：技术实战文（默认）
   byte: `# AI 时代的工程师工具箱
 
-> 一份轻量的排版演示稿，展示 md2wechat 支持的所有排版元素。点击右上角主题可随时换肤。
+> 一份轻量的排版演示稿，展示 mopai 支持的所有排版元素。点击右上角主题可随时换肤。
 
 ## 一、核心工具链
 
@@ -1823,7 +1823,7 @@ def ai_workflow(prompt: str) -> str:
 ---
 
 **行途技术手记** | 关注 AI 时代的工程师成长与效率提升。
-排版 | 墨排 · md2wechat 行途排版引擎（v2.4）\\
+排版 | 墨排 · mopai 行途排版引擎（v2.4）\\
 声明：未经授权，禁止抓取本文用于训练 AI 大模型。`,
 
   // editorial 编辑杂志风：深度长文/人物故事
@@ -1874,7 +1874,7 @@ def ai_workflow(prompt: str) -> str:
 ---
 
 **行途技术手记** | 一个技术人的真实记录，愿我们都能在技术的路上找到自己的节奏。
-排版 | md2wechat 行途排版引擎（v2.4）`,
+排版 | mopai 行途排版引擎（v2.4）`,
 
   // terminal 终端极客风：CLI 教程/技术硬核
   terminal: `# 命令行效率指南：从入门到上瘾
@@ -1936,7 +1936,7 @@ sed -i 's/old/new/g' *.md
 ---
 
 **行途技术手记** | 关注技术效率与工程实践。
-排版 | md2wechat 行途排版引擎（v2.4）`,
+排版 | mopai 行途排版引擎（v2.4）`,
 
   // pure 纯文字随笔：随笔感悟
   pure: `# 关于写作的一些碎碎念
@@ -1992,7 +1992,7 @@ sed -i 's/old/new/g' *.md
 ---
 
 **行途技术手记** | 一个技术人的随笔，想到什么写什么。
-排版 | md2wechat 行途排版引擎（v2.4）`,
+排版 | mopai 行途排版引擎（v2.4）`,
 
   // warm 暖调故事：故事情感
   warm: `# 深夜的便利店
@@ -2050,7 +2050,7 @@ sed -i 's/old/new/g' *.md
 ---
 
 **行途技术手记** | 记录那些平凡而温暖的瞬间。
-排版 | md2wechat 行途排版引擎（v2.4）`
+排版 | mopai 行途排版引擎（v2.4）`
 };
 
 function loadDemo() {

@@ -1,8 +1,8 @@
-# AI 集成指南：让 AI 调用 md2wechat 产出公众号 HTML
+# AI 集成指南：让 AI 调用 mopai 产出公众号 HTML
 
-> 本文档面向 **AI Agent、编程助手、自动化流水线** 的开发者。目标：让 AI 生成的 Markdown，经过 md2wechat 一键转成可直接粘贴进微信公众号编辑器的全内联样式 HTML。
+> 本文档面向 **AI Agent、编程助手、自动化流水线** 的开发者。目标：让 AI 生成的 Markdown，经过 mopai 一键转成可直接粘贴进微信公众号编辑器的全内联样式 HTML。
 
-md2wechat 是**确定性**排版引擎：同样的 Markdown 永远产出同样的 HTML。它不替你"改文章"，只负责"把 Markdown 排好版"。这种确定性正是 AI 流水线最需要的——AI 负责写内容，md2wechat 负责排版，职责清晰，可重复、可测试。
+mopai 是**确定性**排版引擎：同样的 Markdown 永远产出同样的 HTML。它不替你"改文章"，只负责"把 Markdown 排好版"。这种确定性正是 AI 流水线最需要的——AI 负责写内容，mopai 负责排版，职责清晰，可重复、可测试。
 
 三种调用方式，按场景选择：
 
@@ -21,7 +21,7 @@ md2wechat 是**确定性**排版引擎：同样的 Markdown 永远产出同样�
 ### 1.1 基础命令：渲染一个 Markdown 文件
 
 ```bash
-node bin/md2wechat.js input.md -o output.html --theme byte
+node bin/mopai.js input.md -o output.html --theme byte
 ```
 
 执行后会生成一个**带手机预览壳的 HTML 文件**：顶部有工具栏（主题 chip、字数、"复制到公众号"按钮），正文嵌在 520px 的手机框里。打开后点按钮即可全选复制正文样式。
@@ -79,7 +79,7 @@ cat > /tmp/article.md <<'EOF'
 EOF
 
 # --stdout 只输出正文 section HTML（无预览壳），重定向到文件
-node bin/md2wechat.js /tmp/article.md --theme byte --stdout > /tmp/article.html
+node bin/mopai.js /tmp/article.md --theme byte --stdout > /tmp/article.html
 
 # 现在 /tmp/article.html 就是可直接粘贴进公众号的全内联样式 HTML
 wc -c /tmp/article.html
@@ -91,13 +91,13 @@ wc -c /tmp/article.html
 
 ```bash
 # 换主题 + 自定义主色
-node bin/md2wechat.js article.md --theme byte --color "#FF6B35" -o out.html
+node bin/mopai.js article.md --theme byte --color "#FF6B35" -o out.html
 
 # 去掉外链、去掉图片占位（纯文字稿）
-node bin/md2wechat.js article.md --links drop --images drop -o out.html
+node bin/mopai.js article.md --links drop --images drop -o out.html
 
 # 安静模式（脚本里不打印提示）
-node bin/md2wechat.js article.md -o out.html --quiet
+node bin/mopai.js article.md -o out.html --quiet
 ```
 
 ### 1.4 完整 bash 示例：AI 生成 MD → 渲染 → 浏览器打开预览
@@ -109,8 +109,8 @@ node bin/md2wechat.js article.md -o out.html --quiet
 # ai-render.sh — AI 生成 Markdown 后一键排版并预览
 set -euo pipefail
 
-# 1. 准备 md2wechat 路径（按你的实际位置改）
-MD2WECHAT="<repo>"   # 例如 /Users/you/md2wechat
+# 1. 准备 mopai 路径（按你的实际位置改）
+MO_PAI="<repo>"   # 例如 /Users/you/mopai
 
 # 2. 假设这是 AI 刚生成的 Markdown（实际场景里由 AI Agent 写出）
 cat > /tmp/ai_article.md <<'EOF'
@@ -125,7 +125,7 @@ cat > /tmp/ai_article.md <<'EOF'
 ## 做法
 
 1. 用 AI 把口语化思路整理成 Markdown
-2. 用 md2wechat 一键渲染成公众号样式
+2. 用 mopai 一键渲染成公众号样式
 3. 打开预览，点"复制到公众号"
 
 ## 小结
@@ -138,7 +138,7 @@ cat > /tmp/ai_article.md <<'EOF'
 EOF
 
 # 3. 调 CLI 渲染（行途蓝主题）
-node "$MD2WECHAT/bin/md2wechat.js" /tmp/ai_article.md \
+node "$MO_PAI/bin/mopai.js" /tmp/ai_article.md \
     -o /tmp/ai_article.公众号版.html \
     --theme byte
 
@@ -159,7 +159,7 @@ echo "预览已生成：/tmp/ai_article.公众号版.html"
 ### 2.1 API 总览
 
 ```js
-const engine = require('md2wechat/lib/engine.js');
+const engine = require('mopai/lib/engine.js');
 // 或在仓库内直接： require('./lib/engine.js')
 ```
 
@@ -249,7 +249,7 @@ const engine = require('md2wechat/lib/engine.js');
 // render.js — 读取 md 文件，渲染成公众号 HTML，并打印元信息
 const fs = require('fs');
 const path = require('path');
-const engine = require('./lib/engine.js');   // 发布后可改为 require('md2wechat/lib/engine.js')
+const engine = require('./lib/engine.js');   // 发布后可改为 require('mopai/lib/engine.js')
 
 const inputPath = process.argv[2] || 'examples/demo.md';
 const outputPath = process.argv[3] || '/tmp/demo.公众号版.html';
@@ -295,7 +295,7 @@ ok: true
 
 ## 三、Skill 调用（适合 Agent 平台）
 
-仓库自带一个 Agent Skill：`skills/md2wechat-typograph/SKILL.md`。它告诉 DeepSeek Harness / WorkBuddy / Claude Code 这类平台上的 AI **什么时候该用、怎么用、怎么交付**。
+仓库自带一个 Agent Skill：`skills/mopai-typograph/SKILL.md`。它告诉 DeepSeek Harness / WorkBuddy / Claude Code 这类平台上的 AI **什么时候该用、怎么用、怎么交付**。
 
 ### 3.1 AI Agent 的触发时机
 
@@ -317,7 +317,7 @@ Skill 规定的标准动作：
 3. **执行 CLI**：
 
    ```bash
-   node /path/to/md2wechat/bin/md2wechat.js /tmp/article.md \
+   node /path/to/mopai/bin/mopai.js /tmp/article.md \
        -o /tmp/article.公众号版.html \
        --theme byte
    ```
@@ -334,7 +334,7 @@ Skill 规定的标准动作：
 > **（Agent 把用户稿件写入 /tmp/post.md，执行）**
 >
 > ```bash
-> node <repo>/bin/md2wechat.js /tmp/post.md \
+> node <repo>/bin/mopai.js /tmp/post.md \
 >     -o /tmp/post.公众号版.html --theme byte
 > ```
 >
@@ -347,7 +347,7 @@ Skill 规定的标准动作：
 
 ## 四、MCP 接口规划（Model Context Protocol）
 
-MCP（Model Context Protocol）让支持 MCP 的 AI 客户端（如 Claude Desktop、Cursor 等）通过标准协议直接调用工具，无需 AI 自己拼 shell 命令。md2wechat 尚未内置 MCP Server，但封装成本很低——核心就是把 CLI / Node API 包成几个 MCP tool。
+MCP（Model Context Protocol）让支持 MCP 的 AI 客户端（如 Claude Desktop、Cursor 等）通过标准协议直接调用工具，无需 AI 自己拼 shell 命令。mopai 尚未内置 MCP Server，但封装成本很低——核心就是把 CLI / Node API 包成几个 MCP tool。
 
 ### 4.1 概念性工具定义（设计稿，非实现）
 
@@ -358,7 +358,7 @@ MCP（Model Context Protocol）让支持 MCP 的 AI 客户端（如 Claude Deskt
 ```json
 {
   "name": "list_themes",
-  "description": "列出 md2wechat 全部可用主题及其主色、分组",
+  "description": "列出 mopai 全部可用主题及其主色、分组",
   "inputSchema": { "type": "object", "properties": {} }
 }
 ```

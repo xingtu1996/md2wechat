@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * md2wechat CLI v2.4 — Markdown → 微信公众号排版
+ * mopai CLI v2.4 — Markdown → 微信公众号排版
  * 行途排版引擎（XingTu Typograph Engine）命令行入口
  *
  * 用法：
- *   node md2wechat.js <input.md> [-o out.html] [选项]
- *   node md2wechat.js <input.md> --stdout        # 仅输出正文 HTML（供管道）
+ *   mopai <input.md> [-o out.html] [选项]
+ *   mopai <input.md> --stdout        # 仅输出正文 HTML（供管道）
  *
  * 选项：
  *   -o, --output <file>   输出路径（默认同目录 <名>.公众号版.html）
@@ -147,15 +147,15 @@ function printCheck(md, a) {
 function main() {
   const a = parseArgs(process.argv.slice(2));
   if (a.help) {
-    console.log('md2wechat v' + engine.version + ' · 行途排版引擎 CLI\n');
-    console.log('用法: node md2wechat.js <input.md> [-o out.html] [选项]');
+    console.log('mopai v' + engine.version + ' · 行途排版引擎 CLI\n');
+    console.log('用法: mopai <input.md> [-o out.html] [选项]');
     console.log('选项见文件头注释。示例:');
-    console.log('  node md2wechat.js demo.md --theme pure');
-    console.log('  node md2wechat.js demo.md --no-signature --stdout > body.html');
+    console.log('  mopai demo.md --theme pure');
+    console.log('  mopai demo.md --no-signature --stdout > body.html');
     return;
   }
   if (a.listThemes) { console.log(listThemes()); return; }
-  if (!a.input) { console.error('错误：缺少输入文件。\n用法: node md2wechat.js <input.md> [-o out.html]'); process.exit(1); }
+  if (!a.input) { console.error('错误：缺少输入文件。\n用法: mopai <input.md> [-o out.html]'); process.exit(1); }
   if (!engine.themes[a.theme]) { console.error('未知主题: ' + a.theme + '\n' + listThemes()); process.exit(1); }
   if (a.variant !== 'wechat' && !engine.variants[a.variant]) {
     console.error('未知变体: ' + a.variant + '\n可用变体：wechat（默认） / ' + engine.variantKeys.join(' / '));
