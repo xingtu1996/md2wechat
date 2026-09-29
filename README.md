@@ -22,7 +22,50 @@
 
 **产品定位**：不是「AI 智能排版」（确定性是卖点），而是「确定性排版引擎」——同样的输入永远产生同样的输出，可审计、可离线、可自动化。
 
+## 效果展示
+
+### 可视化工作台（单文件离线，浏览器双击即用）
+
+![工作台全览](screenshots/workbench-full.png)
+
+![移动端预览](screenshots/mobile-preview.png)
+
+### 12 主题排版效果（同一稿源，一键切换）
+
+| byte · 行途蓝 | editorial（杂志风） |
+|---|---|
+| ![byte](screenshots/theme-byte.png) | ![editorial](screenshots/theme-editorial.png) |
+
+| infotech · 科技绿 | cyber · 电光科技青 |
+|---|---|
+| ![infotech](screenshots/theme-infotech.png) | ![cyber](screenshots/theme-cyber.png) |
+
+| ink · 墨韵留白 | business · 商业评论 |
+|---|---|
+| ![ink](screenshots/theme-ink.png) | ![business](screenshots/theme-business.png) |
+
+> 完整主题请看 [主题矩阵](#主题矩阵12-主题)；截图位于 `screenshots/`，共 21 张（含 12 主题效果图 + AI 调用流程演示 + 移动端预览）。
+
 ## 30 秒快速开始
+
+
+### 安装（30 秒）
+
+```bash
+# 方式 A：克隆即用（零依赖，无需构建）
+git clone https://github.com/xingtu1996/md2wechat.git
+cd md2wechat
+
+# CLI 全局可用（可选）
+npm link            # 此后任意目录可直接用 mopai 命令
+
+# 验证安装
+mopai --list-themes
+```
+
+> - 零依赖：`package.json` 无 dependencies，`npm install` 只为 link 本身服务；
+> - 单文件工作台 `index.html` 无需安装，浏览器双击打开即用；
+> - 需要卸载时：`npm unlink -g mopai`。
 
 ### 方式 1：单文件工作台（零安装，双击即用）
 
@@ -63,6 +106,9 @@ mopai examples/demo.md --check            # 发布检查清单（6 项）
 mopai examples/demo.md --variant zhihu    # 输出 ./examples/demo.知乎版.md
 mopai examples/demo.md --variant juejin   # 输出 ./examples/demo.掘金版.md
 ```
+
+
+> 💡 **第一个排版示例**：仓库自带 `examples/demo.md`，直接跑 `mopai examples/demo.md --theme byte`，同目录会生成 `demo.公众号版.html`，复制进公众号编辑器即可发布。想换主题？把 `--theme` 换成 [主题矩阵](#主题矩阵12-主题) 里任意 ID。
 
 ### 方式 3：Node 模块（AI / 自动化集成）
 
@@ -410,6 +456,9 @@ node tools/build-app.js        # 重新构建单文件工作台 index.html
 - 🔔 公众号 **「行途技术手记」**：微信搜索关注，看 AI 工程化落地实战
 - 🐙 GitHub：[@xingtu1996](https://github.com/xingtu1996)
 - 📦 仓库：[xingtu1996/md2wechat](https://github.com/xingtu1996/md2wechat)
+
+> 🧩 **行途 AI 工程矩阵**：排版用墨排（本仓库）→ 想把文章变成视频，试试 [book2vido](https://github.com/xingtu1996/book2vido)；想变成播客音频，试试 [article2pod](https://github.com/xingtu1996/article2pod)。三者都是「内容一次创作，多形态分发」工具链的成员。
+
 
 ---
 
