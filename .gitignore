@@ -25,6 +25,7 @@ logs/
 
 # Backup
 *.bak
+*.bak-*
 .backups/
 .trash/
 

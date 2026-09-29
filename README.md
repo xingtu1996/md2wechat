@@ -7,10 +7,10 @@
 > 产品名「墨排」：墨 = 文字/内容，排 = 排版。匠人精神，把每一篇文章排好。
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-v2.3.0-blue.svg)
-![Engine](https://img.shields.io/badge/engine-v2.3-blue.svg)
+![Version](https://img.shields.io/badge/version-v2.4.0-blue.svg)
+![Engine](https://img.shields.io/badge/engine-v2.4-blue.svg)
 ![Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D14-lightgrey.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D18-lightgrey.svg)
 ![AI Friendly](https://img.shields.io/badge/AI--friendly-%E2%9C%93-orange.svg)
 ![Brand](https://img.shields.io/badge/%E8%A1%8C%E9%80%94%E5%87%BA%E5%93%81-%E2%9C%93-success.svg)
 
@@ -26,7 +26,7 @@
 
 ### 方式 1：单文件工作台（零安装，双击即用）
 
-直接双击项目根目录的 `index.html`（59.7KB，零依赖单文件）：
+直接双击项目根目录的 `index.html`（约 88KB，零依赖单文件，内嵌引擎与 CLI 同源）：
 
 - 左侧 Markdown 编辑器，右侧实时预览
 - 顶部一键「复制到公众号」（快捷键 ⌘/Ctrl + Enter）
@@ -56,6 +56,12 @@ node bin/md2wechat.js --list-themes
 
 # 图片模式：placeholder（占位卡，默认）/ keep（外链自动上传）/ drop（忽略）
 node bin/md2wechat.js examples/demo.md --images keep
+
+# 发布就绪（v2.4）
+node bin/md2wechat.js examples/demo.md --summary          # 自动摘要（≤120 字）
+node bin/md2wechat.js examples/demo.md --check            # 发布检查清单（6 项）
+node bin/md2wechat.js examples/demo.md --variant zhihu    # 输出 ./examples/demo.知乎版.md
+node bin/md2wechat.js examples/demo.md --variant juejin   # 输出 ./examples/demo.掘金版.md
 ```
 
 ### 方式 3：Node 模块（AI / 自动化集成）
@@ -153,6 +159,54 @@ const exported = XingTuMd.exportTheme('byte');
 **署名页脚**：默认自动在文末追加三行（`行途XingTu · …` / `排版引擎：墨排 · md2wechat（行途自研，v2.4.0）` / `© 2026 行途 · …`）；`--no-signature` 关闭；若文末 footer 已手写「排版引擎」字样则自动跳过防重复。
 
 **标准文章骨架**：`templates/xingtu-standard-article/template.md`——行头（一句话总结 → 先说结论 → 目录）、章内（本章摘要 / 个人观点 / 数据来源 / 配图占位）、行尾（本文核心结论 → 下一篇预告 → 延伸阅读 → 关于行途）的完整格式契约与使用纪律，见该目录 README。
+
+## 发布就绪（v2.4+）
+
+一次写完，多平台分发 + 发布前自检。全部规则法实现，零依赖、确定性、不联网。
+
+### 多平台变体 `--variant`
+
+| 变体 | 产物 | 关键处理 |
+|---|---|---|
+| `wechat`（默认） | `.公众号版.html` | 全内联样式 HTML，微信编辑器直接粘贴 |
+| `zhihu` | `.知乎版.md` | H1 下沉为 H2（知乎正文不认 H1）、行途格式件降级为引用块、配图占位转标准 `![](...)`、缩进代码块转 fence、剥内联样式 |
+| `juejin` | `.掘金版.md` | 保留 H1-H6 目录层级，其余同 zhihu |
+
+降级规则统一：frontmatter / HTML 注释剥离，`【配图：x.png】` → `![x.png](images/x.png)`，`[视频：x]` → `> 待插入视频：x`，`本章摘要：…` → `> **本章摘要**：…`。加 `--stdout` 可直接接管道。
+
+### 摘要自动提取 `--summary`
+
+优先级：**显式摘要行**（`摘要：` / `本章摘要：` / `章首摘要：`）> **首个引用块**（引子）> **正文前几段**。输出 ≤120 字，优先在句读处断句，直接粘公众号后台即可。
+
+### 首图/封面提示 + 发布检查清单 `--check`
+
+```
+$ node bin/md2wechat.js examples/demo.md --check
+发布检查清单（3/6 项达标）
+  ✅ 文章标题：已从 H1 提取，发布前再核对长度（建议 15-30 字）
+       → AI 时代的工程师工具箱
+  ℹ️ 正文字数：字数偏少，建议 1500-5000 字
+       → 717 字
+  ⚠️ 图片数量：需在公众号后台手动上传 1 张图片
+       → 1 张占位
+  ✅ 摘要：规则法自动提取（≤120 字），可直接粘到公众号后台
+       → 一份轻量的排版演示稿，展示 md2wechat 支持的所有排版元素。…
+  ✅ 封面：正文含 1 张图 → 可截取首图作封面（900×383）；…
+  ℹ️ 原创声明：首发文章建议在公众号后台开启原创声明
+```
+
+其中「摘要」与「封面」两项由规则法自动填值：正文无图时会提示单独准备封面（900×383，2.35:1）并建议在开头加引子图。
+
+### Node API
+
+```js
+const XingTuMd = require('md2wechat/lib/engine.js');
+XingTuMd.extractSummary(md, 120);   // ≤120 字摘要
+XingTuMd.coverAdvice(md);           // { hasImage, count, hasHero, need, cover, advice }
+XingTuMd.publishCheck(md, opts);    // 6 项清单 + 达标计数
+XingTuMd.toVariant(md, 'zhihu');    // Markdown 变体
+XingTuMd.variantKeys;               // ['zhihu', 'juejin']
+```
 
 ## 插件开发指南
 
@@ -277,6 +331,17 @@ md2wechat/
 │   └── demo.md                # 示例稿（通用技术主题，AI 时代的工程师工具箱）
 ├── tools/
 │   └── build-app.js           # 把 engine.js 内联进模板 → 根目录 index.html
+├── test/
+│   ├── engine.test.js         # 引擎单测（node:test，零依赖）
+│   └── cli.test.js            # CLI 端到端测试（node:test + child_process）
+├── .github/
+│   └── workflows/
+│       ├── ci.yml             # Node 18/20/22 矩阵：零依赖校验 + 版本校验 + npm test + CLI smoke
+│       └── release.yml        # tag 触发：上传 index.html 单文件交付物
+├── docs/
+│   ├── ai-integration-guide.md
+│   ├── customization-guide.md
+│   └── 选题与改写-方案.md      # 选题辅助 + 自有稿二次创作（红线：不做洗稿）
 ├── skills/
 │   └── md2wechat-typograph/   # AI Agent Skill（DSH 兼容）
 │       └── SKILL.md
@@ -295,6 +360,17 @@ md2wechat/
 - **Commit 格式**：`feat/fix/docs/style/refactor/perf/test/build/ci/chore: 简述`（Conventional Commits，中文描述）
 - **PR 描述**：说明改动目的、影响范围、测试结果
 - **代码风格**：保持与现有代码一致，零依赖，不引入外部库
+
+### 本地开发
+
+```bash
+npm test                       # 26 项测试（node:test，零依赖，Node ≥18）
+node bin/md2wechat.js examples/demo.md --check    # 手动验证发布就绪项
+node tools/build-app.js        # 重新构建单文件工作台 index.html
+```
+
+- 不要在 `package.json` 里加任何 `dependencies` / `devDependencies`（零依赖是卖点，CI 会卡）
+- 改版本号要同步三处：`package.json` / `lib/engine.js` 的 `ENGINE_VERSION` / README 的 version badge（CI 会卡）
 
 ### 开发流程
 
@@ -320,7 +396,8 @@ md2wechat/
 - [x] v2.2：品牌层统一（产品名「墨排」）+ 图片占位卡优化（带序号）+ 发布检查清单 + 工作台 SVG icon + 2 新主题（editorial/terminal）+ 主题导入导出 + h2 number 形态 + 10 主题
 - [x] v2.2.1：整体色系联动（切换主题时工作台色系跟着变）+ 主题专属演示（5 主题对应风格演示）+ 工作台主题面板滚动支持
 - [x] v2.3：新增 2 科技主题（infotech InfoQ 科技绿 / cyber 电光科技青）+ h2 techprog 形态（章节编号 + 分段进度条 + 彩色标题，参考 InfoQ 版式）+ 12 主题 + infotech 专属演示
-- [ ] v2.4（规划中，2026-10）：工程化基础（目录结构重构 + 测试体系 + CI/CD）+ MCP 服务化 + AI 最佳实践文档 + Markdown 清洗工具
+- [x] v2.4：工程化基础（版本对齐 + `npm test` 测试体系 26 项 + GitHub Actions CI/CD）+ 发布就绪增强（多平台变体 `--variant` / 摘要自动提取 `--summary` / 封面提示 + `--check` 检查清单）
+- [ ] v2.5（规划中，2026-10）：MCP 服务化 + AI 最佳实践文档 + Markdown 清洗工具 + 选题辅助（见 `docs/选题与改写-方案.md`）
 - [ ] v3.0（计划中，2026-11~12）：主题市场（精选 20+）+ 模板引擎 + 桌面应用 + 微信 API 集成 + 多平台适配 + 团队协作
 - [ ] Future（长期）：SaaS 云服务 + AI 智能排版 + 企业级功能（批量排版 + 品牌主题定制 + 数据看板）
 

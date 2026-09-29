@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * md2wechat CLI v2.0 — Markdown → 微信公众号排版
+ * md2wechat CLI v2.4 — Markdown → 微信公众号排版
  * 行途排版引擎（XingTu Typograph Engine）命令行入口
  *
  * 用法：
@@ -20,6 +20,11 @@
  *   --stdout              只打印正文 section HTML，不生成预览壳
  *   -q, --quiet           安静模式
  *
+ * 发布就绪（v2.4）：
+ *   --variant <id>        wechat（默认，公众号 HTML）| zhihu | juejin（Markdown 变体）
+ *   --summary             只打印自动摘要（≤120 字，规则法），不生成文件
+ *   --check               只打印发布检查清单（6 项：标题/字数/图片/摘要/封面/原创）
+ *
  * 行途格式件（v2.4）：块级语义前缀自动成块——
  *   本章摘要：…（浅底摘要块）｜个人观点：/我的判断：/一句话总结：/小答案：（强调观点块）
  *   数据来源：/数据口径：/备注：/注：（小字注释行）
@@ -34,7 +39,7 @@ const engine = require('../lib/engine.js');
 function parseArgs(argv) {
   const a = { input: null, output: null, theme: 'byte', color: null, title: null,
               footer: true, links: 'text', images: 'placeholder', stdout: false, quiet: false,
-              signature: true };
+              signature: true, variant: 'wechat', summary: false, check: false };
   const rest = [];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -47,6 +52,9 @@ function parseArgs(argv) {
       case '--links': a.links = next(); break;
       case '--images': a.images = next(); break;
       case '--no-footer': a.footer = false; break;
+      case '--variant': a.variant = next(); break;
+      case '--summary': a.summary = true; break;
+      case '--check': a.check = true; break;
       case '--signature': a.signature = true; break;
       case '--no-signature': a.signature = false; break;
       case '--stdout': a.stdout = true; break;
@@ -118,6 +126,24 @@ function escAttr(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+const CHECK_ICON = { ok: '✅', warn: '⚠️', info: 'ℹ️' };
+
+function printSummary(md, quiet) {
+  const s = engine.extractSummary(md, 120);
+  if (!s) { console.log('⚠️ 正文太短，无法提取摘要（请手动在公众号后台填写 50-120 字）'); return; }
+  console.log(s);
+  if (!quiet) console.log('（' + s.length + ' 字 · 规则法自动提取，≤120 字）');
+}
+
+function printCheck(md, a) {
+  const r = engine.publishCheck(md, { theme: a.theme, color: a.color || undefined, title: a.title || undefined, links: a.links, images: a.images, signature: a.signature });
+  console.log('发布检查清单（' + r.pass + '/' + r.total + ' 项达标）');
+  r.items.forEach(function (it) {
+    const icon = CHECK_ICON[it.status] || 'ℹ️';
+    console.log('  ' + icon + ' ' + it.label + '：' + it.desc + (it.value ? '\n       → ' + it.value : ''));
+  });
+}
+
 function main() {
   const a = parseArgs(process.argv.slice(2));
   if (a.help) {
@@ -131,9 +157,33 @@ function main() {
   if (a.listThemes) { console.log(listThemes()); return; }
   if (!a.input) { console.error('错误：缺少输入文件。\n用法: node md2wechat.js <input.md> [-o out.html]'); process.exit(1); }
   if (!engine.themes[a.theme]) { console.error('未知主题: ' + a.theme + '\n' + listThemes()); process.exit(1); }
+  if (a.variant !== 'wechat' && !engine.variants[a.variant]) {
+    console.error('未知变体: ' + a.variant + '\n可用变体：wechat（默认） / ' + engine.variantKeys.join(' / '));
+    process.exit(1);
+  }
   if (!fs.existsSync(a.input)) { console.error('文件不存在: ' + a.input); process.exit(1); }
 
   const md = fs.readFileSync(a.input, 'utf-8');
+
+  // 发布就绪：只输出报告，不生成文件
+  if (a.summary) { printSummary(md, a.quiet); return; }
+  if (a.check) { printCheck(md, a); return; }
+
+  // 多平台变体：输出平台友好 Markdown
+  if (a.variant !== 'wechat') {
+    const v = engine.variants[a.variant];
+    const base = path.basename(a.input, path.extname(a.input));
+    const variantMd = engine.toVariant(md, a.variant);
+    if (a.stdout) { process.stdout.write(variantMd); return; }
+    const vPath = a.output || path.join(path.dirname(a.input), base + v.suffix);
+    fs.writeFileSync(vPath, variantMd, 'utf-8');
+    if (!a.quiet) {
+      console.log('✅ 已生成: ' + vPath);
+      console.log('   变体: ' + v.name + ' · ' + variantMd.length + ' 字符 · ' + v.note);
+    }
+    return;
+  }
+
   const res = engine.render(md, {
     theme: a.theme,
     color: a.color || undefined,

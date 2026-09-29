@@ -48,5 +48,5 @@ def ai_workflow(prompt: str) -> str:
 ---
 
 **行途技术手记** | 关注 AI 时代的工程师成长与效率提升。
-排版 | md2wechat 行途排版引擎（v2.2）\
+排版 | md2wechat 行途排版引擎（v2.4）\
 声明：未经授权，禁止抓取本文用于训练 AI 大模型。
