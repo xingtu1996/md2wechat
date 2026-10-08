@@ -35,3 +35,5 @@ logs/
 
 # 截图（旧主题名预览，后续更新后再加入仓库）
 screenshots/
+# 本地 CLI 软链别名（未声明于 package.json，且软链经 API 推送会失真）
+bin/md2wechat.js
