@@ -115,7 +115,7 @@ function buildShell(title, themeId, themeName, main, sectionHtml, words) {
   <div class="chip">${wc}</div>
   <button class="btn" onclick="copyHtml()">复制到公众号</button>
 </div>
-<div class="hint">⌘ 打开此文件 → 点「复制到公众号」→ 微信编辑器粘贴（样式全内联，零失真）。图片为占位卡，请在公众号后台对应位置插入。修改源 md 后重跑 CLI 即可。</div>
+<div class="hint">⌘ 打开此文件 → 点「复制到公众号」→ 微信编辑器粘贴（样式全内联，零失真）。配图已内联（base64），浏览器直接可见；微信后台建稿走 wx_draft_api 自动上传。修改源 md 后重跑 CLI 即可。</div>
 <div class="page"><div class="phone"><div class="phone-head">公众号正文预览</div><div class="phone-body" id="content">${sectionHtml}</div></div><div id="tip" style="padding:14px;text-align:center;"></div></div>
 <script>${copyJs}</script>
 </body>
