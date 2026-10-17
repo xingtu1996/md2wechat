@@ -407,7 +407,7 @@ node tools/build-app.js        # 重新构建单文件工作台 index.html
 
 我是**行途**，一线技术人 + 仍在写代码。这个排版工具来自我做公众号系列文章的真实沉淀——每一篇都要排版，每篇都从工具演进中受益。
 
-- 🔔 公众号 **「行途技术手记」**：微信搜索关注，看 AI 工程化落地实战
+- 🔔 公众号 **「行途 XingTu」**：微信搜索关注，看 AI 工程化落地实战
 - 🐙 GitHub：[@xingtu1996](https://github.com/xingtu1996)
 - 📦 仓库：[xingtu1996/md2wechat](https://github.com/xingtu1996/md2wechat)
 

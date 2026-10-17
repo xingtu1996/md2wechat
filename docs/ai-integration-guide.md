@@ -134,7 +134,7 @@ cat > /tmp/ai_article.md <<'EOF'
 
 ---
 
-**行途技术手记** | 本文由 AI 辅助生成。
+**行途 XingTu** | 本文由 AI 辅助生成。
 EOF
 
 # 3. 调 CLI 渲染（行途蓝主题）
